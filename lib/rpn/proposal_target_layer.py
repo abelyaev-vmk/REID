@@ -204,10 +204,10 @@ def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_clas
     labels = gt_boxes[gt_assignment, 4]
 
     # Select foreground RoIs as those with >= FG_THRESH overlap
-    fg_inds = np.where(max_overlaps >= cfg.TRAIN.FG_THRESH)[0]
+    fg_inds = np.array(np.where(max_overlaps >= cfg.TRAIN.FG_THRESH)[0], dtype=int)
     # Guard against the case when an image has fewer than fg_rois_per_image
     # foreground RoIs
-    fg_rois_per_this_image = min(fg_rois_per_image, fg_inds.size)
+    fg_rois_per_this_image = int(min(fg_rois_per_image, fg_inds.size))
     # Sample foreground regions without replacement
     if fg_inds.size > 0:
         fg_inds = npr.choice(fg_inds, size=fg_rois_per_this_image, replace=False)
@@ -218,8 +218,8 @@ def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_clas
 
     NEAR_FRACTION = 0.2
     bg_near_cnt = int(np.floor(bg_rois_per_this_image * NEAR_FRACTION))
-    bg_near_inds = np.where((max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
-                            (max_overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
+    bg_near_inds = np.array(np.where((max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
+                                     (max_overlaps >= cfg.TRAIN.BG_THRESH_LO))[0], dtype=int)
     bg_near_cnt = min(bg_near_cnt, bg_near_inds.size)
     if bg_near_inds.size > 0:
         bg_near_inds = npr.choice(bg_near_inds, size=bg_near_cnt, replace=False)
