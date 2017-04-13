@@ -66,7 +66,6 @@ def moving_average(a, n=3):
     try:
         ret = np.cumsum(a, dtype=float)
         ret[n:] = ret[n:] - ret[:-n]
-        print(a.shape)
         ret[:n - 1] /= np.arange(1, n)
         ret[n - 1:] /= n
         return ret
@@ -93,7 +92,7 @@ if __name__ == '__main__':
                 tools=TOOLS, webgl=True)
     p1.line(iters, global_losses, legend="Train loss", color='blue')
     p1.line(iters, bbox_losses, legend="BBox loss", color='green')
-    p1.line(iters, pid_losses, legend="BBox loss", color='yellow')
+    p1.line(iters, pid_losses, legend="PID loss", color='yellow')
     p1.ygrid[0].ticker.desired_num_ticks = 30
     p1.xgrid[0].ticker.desired_num_ticks = 20
 
