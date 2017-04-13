@@ -15,7 +15,7 @@ from core.bbox_transform import bbox_transform
 from .generate_anchors import generate_anchors
 from utils.cython_bbox import bbox_overlaps
 
-DEBUG = True
+DEBUG = False
 
 
 class ProposalTargetLayer(caffe.Layer):
