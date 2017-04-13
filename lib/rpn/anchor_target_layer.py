@@ -18,7 +18,7 @@ from core.bbox_transform import bbox_transform
 from utils.timer import Timer
 
 
-DEBUG = True
+DEBUG = False
 t = Timer()
 
 
