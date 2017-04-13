@@ -82,6 +82,11 @@ if __name__ == '__main__':
     bbox_losses = parse_bbox_train_loss(log_path)
     pid_losses = parse_pid_train_loss(log_path)
 
+    if len(bbox_losses) != len(global_losses) != len(pid_losses):
+        l = min(len(bbox_losses), len(global_losses), len(pid_losses))
+        iters, global_losses, bbox_losses, pid_losses = \
+            iters[:l], global_losses[:l], bbox_losses[:l], pid_losses[:l]
+
     from bokeh.plotting import figure
     from bokeh.embed import file_html
     from bokeh.resources import CDN
