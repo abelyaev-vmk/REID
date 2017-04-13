@@ -129,7 +129,6 @@ class ProposalTargetLayer(caffe.Layer):
             top[5].reshape(*aux_label.shape)
             top[5].data[...] = aux_label
 
-
     def backward(self, top, propagate_down, bottom):
         """This layer does not propagate gradients."""
         pass
