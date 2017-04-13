@@ -225,9 +225,9 @@ def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_clas
         bg_near_inds = npr.choice(bg_near_inds, size=bg_near_cnt, replace=False)
 
     bg_far_cnt = bg_rois_per_this_image - bg_near_cnt
-    bg_far_inds = (np.where(max_overlaps < 0.01)[0])[:300]
+    bg_far_inds = np.array((np.where(max_overlaps < 0.01)[0])[:300], dtype=int)
 
-    bg_far_cnt = min(bg_far_cnt, bg_far_inds.size)
+    bg_far_cnt = int(min(bg_far_cnt, bg_far_inds.size))
     bg_far_inds = npr.choice(bg_far_inds, size=bg_far_cnt, replace=False)
     bg_inds = np.append(bg_near_inds, bg_far_inds)
 
