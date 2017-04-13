@@ -87,6 +87,11 @@ if __name__ == '__main__':
         iters, global_losses, bbox_losses, pid_losses = \
             iters[:l], global_losses[:l], bbox_losses[:l], pid_losses[:l]
 
+    print('bbox_loss:', bbox_losses)
+    print('shape=', len(bbox_losses))
+    print('pid_loss:', pid_losses)
+    print('shape=', len(pid_losses))
+
     from bokeh.plotting import figure
     from bokeh.embed import file_html
     from bokeh.resources import CDN
