@@ -4,6 +4,7 @@
 # Copyright (c) 2016 Graphics & Media Lab
 # Licensed under The MIT License [see LICENSE for details]
 # Written by Konstantin Sofiyuk
+# Modified by Andrey Belyaev
 # --------------------------------------------------------
 
 import argparse
@@ -12,22 +13,16 @@ import re
 
 
 def parse_args():
-    """
-    Parse input arguments
-    """
     parser = argparse.ArgumentParser(description='Plot train-loss curve')
     parser.add_argument('--log', dest='log_path',
                         help='path to train log file', type=str, required=True)
     parser.add_argument('--output', dest='output', type=str, required=True)
-
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def parse_global_train_loss(log_path):
     iters = []
     losses = []
-
     with open(log_path, 'r') as f:
         for line in f.readlines():
             m = re.match(r".*Iteration ([-+]?\d+), loss = ([-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?)", line)
@@ -41,24 +36,21 @@ def parse_global_train_loss(log_path):
 
 def parse_bbox_train_loss(log_path):
     losses = []
-
     with open(log_path, 'r') as f:
         for line in f.readlines():
             m = re.match(r".*: loss_bbox = ([-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?)*", line)
             if m:
                 losses.append(float(m.group(1)))
-
     return np.array(losses[5:])
+
 
 def parse_pid_train_loss(log_path):
     losses = []
-
     with open(log_path, 'r') as f:
         for line in f.readlines():
             m = re.match(r".*pid_loss = ([-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?)*", line)
             if m:
                 losses.append(float(m.group(1)))
-
     return np.array(losses[5:])
 
 
@@ -86,11 +78,6 @@ if __name__ == '__main__':
         l = min(len(bbox_losses), len(global_losses), len(pid_losses))
         iters, global_losses, bbox_losses, pid_losses = \
             iters[:l], global_losses[:l], bbox_losses[:l], pid_losses[:l]
-
-    print('bbox_loss:', bbox_losses)
-    print('shape=', len(bbox_losses))
-    print('pid_loss:', pid_losses)
-    print('shape=', len(pid_losses))
 
     from bokeh.plotting import figure
     from bokeh.embed import file_html
