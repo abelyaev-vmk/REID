@@ -1,0 +1,13 @@
++ echo Logging output to exps/example/logs/train_.txt.2017-04-08_13-07-58
+Logging output to exps/example/logs/train_.txt.2017-04-08_13-07-58
++ python3 ./tools/train_net.py --gpu 0 --cfg exps/example/config.yml --exp_dir example
+/home/mopkobka/CourseWork/venv-gml-nn/lib/python3.5/site-packages/sklearn/cross_validation.py:44: DeprecationWarning: This module was deprecated in version 0.18 in favor of the model_selection module into which all the refactored classes and functions are moved. Also note that the interface of the new CV iterators are different from that of this module. This module will be removed in 0.20.
+  "This module will be removed in 0.20.", DeprecationWarning)
+Called with args:
+Namespace(cfg_file='exps/example/config.yml', exp_dir='example', gpu_id=0)
+Traceback (most recent call last):
+  File "./tools/train_net.py", line 53, in <module>
+    cfg_from_file(args.cfg_file)
+  File "/home/mopkobka/CourseWork/gml-nn-detector/tools/../lib/core/config.py", line 312, in cfg_from_file
+    import yaml
+ImportError: No module named 'yaml'

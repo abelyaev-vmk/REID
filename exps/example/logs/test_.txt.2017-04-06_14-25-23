@@ -1,0 +1,18 @@
++ echo Logging output to exps/example/logs/test_.txt.2017-04-06_14-25-23
+Logging output to exps/example/logs/test_.txt.2017-04-06_14-25-23
++ '[' -n 0 ']'
+++ sort -n
+++ find exps/example/output -type f -ipath '*0*.caffemodel' -printf '%T@ %p\n'
+++ cut -f2- '-d '
+++ tail -1
+find: ‘exps/example/output’: No such file or directory
++ NET_FINAL=
++ echo
+
++ ./tools/test_net.py --gpu 0 --net --cfg exps/example/config.yml --exp_dir example --datasets
+/home/mopkobka/CourseWork/venv-Faster-RCNN/lib/python3.5/site-packages/sklearn/cross_validation.py:44: DeprecationWarning: This module was deprecated in version 0.18 in favor of the model_selection module into which all the refactored classes and functions are moved. Also note that the interface of the new CV iterators are different from that of this module. This module will be removed in 0.20.
+  "This module will be removed in 0.20.", DeprecationWarning)
+usage: test_net.py [-h] [--gpu GPU_ID] [--net CAFFEMODEL] [--cfg CFG_FILE]
+                   [--set ...] [--exp_dir EXP_DIR]
+                   [--datasets [DATASETS [DATASETS ...]]]
+test_net.py: error: argument --net: expected one argument

@@ -1,0 +1,19 @@
++ echo Logging output to exps/example/logs/train_.txt.2017-04-08_13-07-16
+Logging output to exps/example/logs/train_.txt.2017-04-08_13-07-16
++ python3 ./tools/train_net.py --gpu 0 --cfg exps/example/config.yml --exp_dir example
+Traceback (most recent call last):
+  File "./tools/train_net.py", line 14, in <module>
+    from core.train import train_net
+  File "/home/mopkobka/CourseWork/gml-nn-detector/tools/../lib/core/train.py", line 21, in <module>
+    from core.detector_model import DetectorModel
+  File "/home/mopkobka/CourseWork/gml-nn-detector/tools/../lib/core/detector_model.py", line 10, in <module>
+    from detector_nets.factory import create_network
+  File "/home/mopkobka/CourseWork/gml-nn-detector/tools/../lib/detector_nets/factory.py", line 8, in <module>
+    from detector_nets.seg_net import SegNet
+  File "/home/mopkobka/CourseWork/gml-nn-detector/tools/../lib/detector_nets/seg_net.py", line 22, in <module>
+    from core.nms_wrapper import nms
+  File "/home/mopkobka/CourseWork/gml-nn-detector/tools/../lib/core/nms_wrapper.py", line 9, in <module>
+    from fast_nms.gpu_nms import gpu_nms
+  File "/home/mopkobka/CourseWork/gml-nn-detector/tools/../lib/fast_nms/__init__.py", line 1, in <module>
+    import pyximport
+ImportError: No module named 'pyximport'

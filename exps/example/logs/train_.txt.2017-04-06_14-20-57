@@ -1,0 +1,7 @@
++ echo Logging output to exps/example/logs/train_.txt.2017-04-06_14-20-57
+Logging output to exps/example/logs/train_.txt.2017-04-06_14-20-57
++ ./tools/train_net.py --gpu 0 --cfg exps/example/config.yml --exp_dir example
+Traceback (most recent call last):
+  File "./tools/train_net.py", line 13, in <module>
+    import tools._init_paths
+ImportError: No module named 'tools'

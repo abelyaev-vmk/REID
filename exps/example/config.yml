@@ -1,0 +1,152 @@
+RNG_SEED: 777
+
+MODEL:
+  NAME: "faces_example"
+  WEIGHTS_PATH: /home/mopkobka/CourseWork/DockerShared/gml-nn/data/NET/VGG16.v2.caffemodel
+  PRETRAINED_MODEL_CONFIG: /home/mopkobka/CourseWork/gml-nn-detector/models/vgg16/model.prototxt
+  
+  ATTACHED_NETS:
+    -
+      DISABLED: True
+      NAME: "rpn_small"
+      TYPE: "RPN"
+      PARENT_LAYER: "relu2_2"
+
+      ARCHITECTURE: |-
+                m.add_layer(ConvWithActivation(p('conv1'), 128, 3))
+                m.add_layer(ConvWithActivation(p('conv2'), 128, 3, dropout=0.3),
+                            parent_layer=-1)
+        
+                m.add_layer(ConvWithActivation(p('output_cls'), 80, 3),
+                            parent_layer=p('conv2'))
+
+                m.add_layer(ConvWithActivation(p('output_box'), 80, 3),
+                            parent_layer=p('conv2'))
+
+      ANCHOR_RATIOS: [1.0]
+      ANCHOR_SCALES: [3, 6, 9, 12]
+      ANCHOR_SHIFT_NUM_XY: [[1,1], [1,1], [1, 1], [1, 1]]
+                              
+      POSITIVE_OVERLAP: 0.6
+      NEGATIVE_OVERLAP: 0.4
+
+      BATCHSIZE: 256
+      FG_FRACTION: 0.5
+      TOP_NEGATIVE_FRACTION: 0.2
+      SQUARE_TARGETS: True
+      
+      NMS_THRESH: 0.7
+      PRE_NMS_TOP_N: 12000
+      POST_NMS_TOP_N: 500
+    -
+      NAME: "rpn_big"
+      TYPE: "RPN"
+      PARENT_LAYER: "relu5_3"
+
+      ARCHITECTURE: |-
+                m.add_layer(ConvWithActivation(p('conv1'), 512, 3))
+                m.add_layer(ConvWithActivation(p('conv2'), 512, 3, dropout=0.3),
+                            parent_layer=-1)
+        
+                m.add_layer(ConvWithActivation(p('output_cls'), 384, 3),
+                            parent_layer=p('conv2'))
+
+                m.add_layer(ConvWithActivation(p('output_box'), 384, 3),
+                            parent_layer=p('conv2'))
+
+      ANCHOR_RATIOS: [1.0]
+      ANCHOR_SCALES: [2.5,
+                   3.0249999999999999,
+                   3.66025,
+                   4.4289024999999995,
+                   5.3589720249999999,
+                   6.4843561502499991,
+                   7.8460709418024983,
+                   9.4937458395810221,
+                   11.487432465893036,
+                   13.899793283730574,
+                   16.818749873313998,
+                   20.350687346709933,
+                   24.624331689519021,
+                   29.795441344318014]
+      ANCHOR_SHIFT_NUM_XY: [[2, 2], [2, 2], [2, 2], [2, 2],
+                              [1, 1], [1, 1], [1, 1], [1, 1],
+                              [1, 1], [1, 1], [1, 1], [1, 1],
+                              [1, 1], [1, 1]]
+      POSITIVE_OVERLAP: 0.6
+      NEGATIVE_OVERLAP: 0.4
+      
+      BATCHSIZE: 256
+      FG_FRACTION: 0.5
+      TOP_NEGATIVE_FRACTION: 0.2
+      SQUARE_TARGETS: True
+
+      NMS_THRESH: 0.7
+      PRE_NMS_TOP_N: 12000
+      POST_NMS_TOP_N: 500
+
+TRAIN:
+  DATASETS:
+    -
+      TYPE: BBOX_JSON_MARKING
+      PATH: /home/mopkobka/CourseWork/DockerShared/gml-nn/tiny_dataset
+      SCALES: [500]
+      MAX_SIZE: 700
+#    -
+#      TYPE: BBOX_JSON_MARKING
+#      PATH: /home/local/work/data/faces/BigSampleFNTrain_p3lr11/
+#      SCALES: [350, 1000]
+#      MAX_SIZE: 1400
+        
+  SOLVER:    
+    IMS_PER_BATCH: 2
+    
+    TRAIN_ITERS: 90000
+    
+    BASE_LR: 0.001
+    LR_POLICY:
+      TYPE: "multistep"
+      STEPS: [70000, 120000]
+      GAMMA: 0.1
+      
+    WEIGHT_DECAY: 0.0005
+    MOMENTUM: 0.9
+    
+    DISPLAY:
+      PERIOD: 20
+      AVERAGE_LOSS: 100
+
+  HAS_RPN: True
+  USE_FLIPPED: True
+  DOUBLE_GENERATE: False
+  GENERATED_FRACTION: 0.0
+  
+  ENABLE_SMART_ORDER: False
+  SO_TAIL_LEN: 1000
+  SO_FORCE_BATCHSIZE: 500
+  SO_FORCE_ROUNDS: 8
+  SO_GOOD_SKIP_PROB: 0.85
+  SNAPSHOT_ITERS: 5000
+
+
+TEST:
+  MAX_PER_IMAGE: 200
+  WITHOUT_UPSAMPLE: True
+  FINAL_NMS: 0.5
+
+  DATASETS:
+    -
+      TYPE: IMAGES_DIR
+      PATH: /home/local/work/data/faces/BigSampleFNTest_p3lr11/imgs
+      SCALES: [350, 1000]
+      MAX_SIZE: 1400
+      OUTPUT_FILE: videoset.json
+    -
+      TYPE: IMAGES_DIR
+      PATH: /home/local/work/data/faces/FDDB/FDDB_p3lr11/imgs
+      SCALES: [500]
+      MAX_SIZE: 700
+      OUTPUT_FILE: fddb.json
+  
+   
+    
