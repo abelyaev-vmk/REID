@@ -44,7 +44,7 @@ def parse_bbox_train_loss(log_path):
 
     with open(log_path, 'r') as f:
         for line in f.readlines():
-            m = re.match(r".*loss_bbox = ([-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?)*", line)
+            m = re.match(r".*: loss_bbox = ([-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?)*", line)
             if m:
                 losses.append(float(m.group(1)))
 
