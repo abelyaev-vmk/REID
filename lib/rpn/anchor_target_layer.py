@@ -18,7 +18,7 @@ from core.bbox_transform import bbox_transform
 from utils.timer import Timer
 
 
-DEBUG = False
+DEBUG = True
 t = Timer()
 
 
@@ -117,6 +117,7 @@ class AnchorTargetLayer(caffe.Layer):
         if DEBUG:
             print('')
             print('class_distrib', gt_boxes[:, 4])
+            print('class_pid', gt_boxes[:, 5])
             print('im_size: ({}, {})'.format(im_info[0], im_info[1]))
             print('scale: {}'.format(im_info[2]))
             print('height, width: ({}, {})'.format(height, width))

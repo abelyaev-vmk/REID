@@ -15,8 +15,8 @@ from core.bbox_transform import bbox_transform
 from .generate_anchors import generate_anchors
 from utils.cython_bbox import bbox_overlaps
 
-
 DEBUG = True
+
 
 class ProposalTargetLayer(caffe.Layer):
     """
@@ -33,7 +33,7 @@ class ProposalTargetLayer(caffe.Layer):
 
         if DEBUG:
             print('anchors:')
-            print('<<<'*100)
+            print('<<<' * 100)
             print(top[0])
             self._count = 0
             self._fg_num = 0
@@ -60,7 +60,6 @@ class ProposalTargetLayer(caffe.Layer):
         if len(top) > 5:
             top[5].reshape(1, 1)
 
-
     def forward(self, bottom, top):
 
         # Proposal ROIs (0, x1, y1, x2, y2) coming from RPN
@@ -79,7 +78,7 @@ class ProposalTargetLayer(caffe.Layer):
 
         # Sanity check: single batch only
         assert np.all(all_rois[:, 0] == 0), \
-                'Only single item batches are supported'
+            'Only single item batches are supported'
 
         num_images = 1
         rois_per_image = cfg.TRAIN.BATCH_SIZE / num_images
@@ -174,9 +173,10 @@ def _compute_targets(ex_rois, gt_rois, labels):
     if cfg.TRAIN.BBOX_NORMALIZE_TARGETS_PRECOMPUTED:
         # Optionally normalize targets by a precomputed mean and stdev
         targets = ((targets - np.array(cfg.TRAIN.BBOX_NORMALIZE_MEANS))
-                / np.array(cfg.TRAIN.BBOX_NORMALIZE_STDS))
+                   / np.array(cfg.TRAIN.BBOX_NORMALIZE_STDS))
     return np.hstack(
-            (labels[:, np.newaxis], targets)).astype(np.float32, copy=False)
+        (labels[:, np.newaxis], targets)).astype(np.float32, copy=False)
+
 
 def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_classes, bg_aux_label):
     """Generate a random sample of RoIs comprising foreground and background
