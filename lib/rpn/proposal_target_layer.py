@@ -82,8 +82,8 @@ class ProposalTargetLayer(caffe.Layer):
                 'Only single item batches are supported'
 
         num_images = 1
-        rois_per_image = cfg.TRAIN.RPN_BATCHSIZE / num_images
-        fg_rois_per_image = np.round(cfg.TRAIN.RPN_FG_FRACTION * rois_per_image)
+        rois_per_image = cfg.TRAIN.BATCH_SIZE / num_images
+        fg_rois_per_image = np.round(cfg.TRAIN.FG_FRACTION * rois_per_image)
 
         # Sample rois with classification labels and bounding box regression
         # targets
@@ -179,7 +179,7 @@ def _compute_targets(ex_rois, gt_rois, labels):
     return np.hstack(
             (labels[:, np.newaxis], targets)).astype(np.float32, copy=False)
 
-def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_classes):
+def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_classes, bg_aux_label):
     """Generate a random sample of RoIs comprising foreground and background
     examples
     """
