@@ -1,6 +1,11 @@
+.DS_Store
 *.pyc
-.idea
+
+#IDEA specific
 .idea/
 *.iws
 *.iml
+
+# Project specific
+exps/*/logs
 

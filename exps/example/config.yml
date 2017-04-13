@@ -3,7 +3,7 @@ RNG_SEED: 777
 MODEL:
   NAME: "faces_example"
   WEIGHTS_PATH: /home/mopkobka/CourseWork/DockerShared/gml-nn/data/NET/VGG16.v2.caffemodel
-  PRETRAINED_MODEL_CONFIG: /home/mopkobka/CourseWork/gml-nn-detector/models/vgg16/model.prototxt
+  PRETRAINED_MODEL_CONFIG: /home/mopkobka/CourseWork/REID/models/vgg16/model.prototxt
   
   ATTACHED_NETS:
     -
