@@ -1,7 +1,0 @@
-+ echo Logging output to exps//logs/train_.txt.2017-04-04_13-55-30
-Logging output to exps//logs/train_.txt.2017-04-04_13-55-30
-+ ./tools/train_net.py --gpu 0 --cfg exps//config.yml --exp_dir
-/home/mopkobka/CourseWork/venv-Faster-RCNN/lib/python3.5/site-packages/sklearn/cross_validation.py:44: DeprecationWarning: This module was deprecated in version 0.18 in favor of the model_selection module into which all the refactored classes and functions are moved. Also note that the interface of the new CV iterators are different from that of this module. This module will be removed in 0.20.
-  "This module will be removed in 0.20.", DeprecationWarning)
-usage: train_net.py [-h] [--gpu GPU_ID] [--cfg CFG_FILE] [--exp_dir EXP_DIR]
-train_net.py: error: argument --exp_dir: expected one argument

@@ -7,5 +7,5 @@
 *.iml
 
 # Project specific
-exps/*/logs
+*/logs
 

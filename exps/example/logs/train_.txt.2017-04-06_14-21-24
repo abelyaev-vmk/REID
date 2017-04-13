@@ -1,7 +1,0 @@
-+ echo Logging output to exps/example/logs/train_.txt.2017-04-06_14-21-24
-Logging output to exps/example/logs/train_.txt.2017-04-06_14-21-24
-+ ./tools/train_net.py --gpu 0 --cfg exps/example/config.yml --exp_dir example
-Traceback (most recent call last):
-  File "./tools/train_net.py", line 14, in <module>
-    from lib.core.train import train_net
-ImportError: No module named 'lib'
