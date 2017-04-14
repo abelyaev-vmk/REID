@@ -316,7 +316,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         _t['im_detect'].tic()
         scores, boxes = im_detect(net, model, sample)
         _t['im_detect'].toc()
-
+        print('IM-DETECT!:', scores, boxes)
         _t['misc'].tic()
 
         scores_class = scores.argmax(axis=1)
@@ -335,7 +335,7 @@ def test_image_collection(net, model, image_collection, output_dir):
             detections = \
                 np.hstack((cls_boxes, cls_scores[mask, np.newaxis], scores_class[mask].reshape((-1,1)))) \
                     .astype(np.float32, copy=False)
-            keep = nms(detections[:, :5], cfg.TEST.FINAL_NMS)
+            keep = nms(detections[:, :6], cfg.TEST.FINAL_NMS)
             detections = detections[keep]
             json_detections = to_json_format(detections)
         else:
