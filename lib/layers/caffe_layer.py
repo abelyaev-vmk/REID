@@ -47,13 +47,16 @@ class CaffeLayer:
         lines = []
         break_line = 0
         for i, line in enumerate(open(solver_prototxt, 'r')):
+            if line[:5] == 'name:':
+                break_line = None
             lines.append(line)
-            if line[0] == '}':
+            if line[0] == '}' and break_line is not None:
                 break_line = i
         with open(solver_prototxt, 'w') as f:
             f.writelines(lines[:break_line])
             f.write(self.to_string(level=2))
-            f.writelines(lines[break_line:])
+            if break_line is not None:
+                f.writelines(lines[break_line:])
 
     @staticmethod
     def get_prev_param_str(txt):
@@ -164,4 +167,69 @@ class CaffeLayer:
                       bbox_pred_layer, loss_bbox_layer,
                       feat_layer, relu8_layer, drop8_layer,
                       pid_score_layer, pid_loss_layer, pid_accuracy_layer):
+            layer.append_to_solver(solver_prototxt)
+
+    @staticmethod
+    def reid_append_test_layers(solver_prototxt):
+
+        # ===== ROI
+        roi_pooling_layer = CaffeLayer(name='roi-pool', type='ROIPooling', bottoms=('conv5_3', 'rpn_big_proposal_rois'),
+                                       params=[['roi_pooling_param', {'pooled_h': 7,
+                                                                      'pooled_w': 7,
+                                                                      'spatial_scale': 0.0625}]])
+
+        # ===== Fully Connected for bbox regression
+        fc6_layer = CaffeLayer(name='fc6', type='InnerProduct', bottoms=('roi-pool',),
+                               params=[['param', {'lr_mult': 1.0}],
+                                       ['param', {'lr_mult': 2.0}],
+                                       ['inner_product_param', {'num_output': 4096}]])
+        relu6_layer = CaffeLayer(name='relu6', type='ReLU', bottoms=('fc6',), tops=('fc6',))
+        drop6_layer = CaffeLayer(name='drop6', type='Dropout', bottoms=('fc6',), tops=('fc6',),
+                                 params=[['dropout_param', {'dropout_ratio': 0.5}]])
+
+        fc7_layer = CaffeLayer(name='fc7', type='InnerProduct', bottoms=('fc6',),
+                               params=[['param', {'lr_mult': 1.0}],
+                                       ['param', {'lr_mult': 2.0}],
+                                       ['inner_product_param', {'num_output': 4096}]])
+        relu7_layer = CaffeLayer(name='relu7', type='ReLU', bottoms=('fc7',), tops=('fc7',))
+        drop7_layer = CaffeLayer(name='drop7', type='Dropout', bottoms=('fc7',), tops=('fc7',),
+                                 params=[['dropout_param', {'dropout_ratio': 0.5}]])
+
+        bbox_pred_layer = CaffeLayer(name='bbox_pred', type='InnerProduct', bottoms=('fc7',),
+                                     params=[['param', {'lr_mult': 1.0}],
+                                             ['param', {'lr_mult': 2.0}],
+                                             ['inner_product_param', {'num_output': 8,
+                                                                      'weight_filler': {'type': 'gaussian',
+                                                                                        'std': 0.001},
+                                                                      'bias_filler': {'type': 'constant',
+                                                                                      'value': 0}}]])
+
+        # ===== Fully Connected for pid
+        feat_layer = CaffeLayer(name='feat', type='InnerProduct', bottoms=('fc7',),
+                                params=[['param', {'lr_mult': 1, 'decay_mult': 1}],
+                                        ['param', {'lr_mult': 2, 'decay_mult': 0}],
+                                        ['inner_product_param', {'num_output': 256,
+                                                                 'weight_filler': {'type': 'gaussian',
+                                                                                   'std': 0.01},
+                                                                 'bias_filler': {'type': 'constant',
+                                                                                 'value': 0}}]])
+        relu8_layer = CaffeLayer(name='relu8', type='ReLU', bottoms=('feat',), tops=('feat',))
+        drop8_layer = CaffeLayer(name='drop8', type='Dropout', bottoms=('feat',), tops=('feat',),
+                                 params=[['dropout_param', {'dropout_ratio': 0.5}]])
+
+        pid_score_layer = CaffeLayer(name='pid_score', type='InnerProduct', bottoms=('feat',),
+                                     params=[['param', {'lr_mult': 1, 'decay_mult': 1}],
+                                             ['param', {'lr_mult': 2, 'decay_mult': 0}],
+                                             ['inner_product_param', {'num_output': 5533,
+                                                                      'weight_filler': {'type': 'gaussian',
+                                                                                        'std': 0.001},
+                                                                      'bias_filler': {'type': 'constant',
+                                                                                      'value': 0}}]])
+
+        for layer in (roi_pooling_layer,
+                      fc6_layer, relu6_layer, drop6_layer,
+                      fc7_layer, relu7_layer, drop7_layer,
+                      bbox_pred_layer,
+                      feat_layer, relu8_layer, drop8_layer,
+                      pid_score_layer):
             layer.append_to_solver(solver_prototxt)

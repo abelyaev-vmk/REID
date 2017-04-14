@@ -23,6 +23,7 @@ from pathlib import PurePath
 from datasets.collections import ImagesCollection
 from datasets.iterators import DirectIterator
 from core.detector_model import DetectorModel
+from lib.layers.caffe_layer import CaffeLayer
 
 
 def _get_image_blob(sample, target_size):
@@ -117,7 +118,7 @@ def fixed_scale_detect(net, model, sample, target_size, boxes=None):
     blobs_out, im_scales = fixed_scale_forward(net, model, sample, target_size, boxes)
 
     rois, scores = model.extract_detections(net)
-
+    print('>>MODEL EXTRACTED', rois, scores)
     assert len(im_scales) == 1, "Only single-image batch implemented"
 
     # unscale back to raw image space
@@ -306,7 +307,7 @@ def test_image_collection(net, model, image_collection, output_dir):
     max_per_image = cfg.TEST.MAX_PER_IMAGE
     SCORE_THRESH = 0.05
 
-    _t = {'im_detect' : Timer(), 'misc' : Timer()}
+    _t = {'im_detect' : Timer(), 'misc': Timer()}
     all_detections = {}
     for indx, sample in enumerate(DirectIterator(image_collection)):
         image_basename = str(PurePath(sample.id).relative_to(image_collection.imgs_path))
@@ -418,10 +419,12 @@ def extract_regions_image_collection(net, model, image_collection):
         result[image_basename] = image_regions
         yield result
 
+
 def test_net(weights_path, output_dir, dataset_names=None):
     model = DetectorModel(cfg.MODEL)
 
     fd, test_prototxt = model.create_temp_test_prototxt()
+    CaffeLayer.reid_append_test_layers(test_prototxt)
     net = caffe.Net(test_prototxt, weights_path, caffe.TEST)
     caffe.optimize_memory(net)
     net.name = os.path.splitext(os.path.basename(weights_path))[0]

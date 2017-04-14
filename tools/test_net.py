@@ -20,6 +20,7 @@ import pprint
 import time, os, sys
 import datetime
 
+
 def parse_args():
     """
     Parse input arguments
@@ -45,6 +46,7 @@ def parse_args():
 
     args = parser.parse_args()
     return args
+
 
 if __name__ == '__main__':
     args = parse_args()
