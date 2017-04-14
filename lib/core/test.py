@@ -23,7 +23,7 @@ from pathlib import PurePath
 from datasets.collections import ImagesCollection
 from datasets.iterators import DirectIterator
 from core.detector_model import DetectorModel
-from lib.layers.caffe_layer import CaffeLayer
+from layers.caffe_layer import CaffeLayer
 
 
 class python2dict(dict):

@@ -21,7 +21,7 @@ import json
 from datasets.collections import ImagesCollection
 from core.detector_model import DetectorModel
 from caffe_model.solver_config import SolverConfig
-from lib.layers.caffe_layer import CaffeLayer
+from layers.caffe_layer import CaffeLayer
 
 
 class SolverWrapper(object):
