@@ -27,7 +27,10 @@ class ProposalLayer(caffe.Layer):
 
     def setup(self, bottom, top):
         # parse the layer parameter string, which must be valid JSON
-        layer_params = json.loads(self.param_str_)
+        try:
+            layer_params = json.loads(self.param_str_)
+        except:
+            layer_params = json.loads(self.param_str)
 
         self._feat_stride = layer_params['feat_stride']
         self._anchors = generate_anchors(base_size=self._feat_stride,

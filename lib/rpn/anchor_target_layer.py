@@ -29,8 +29,10 @@ class AnchorTargetLayer(caffe.Layer):
     """
 
     def setup(self, bottom, top):
-
-        layer_params = json.loads(self.param_str_)
+        try:
+            layer_params = json.loads(self.param_str_)
+        except:
+            layer_params = json.loads(self.param_str)
         self._feat_stride = layer_params['feat_stride']
         self._iters = 0
         self._periodic_tn_enabled = True
