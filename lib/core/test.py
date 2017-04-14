@@ -148,7 +148,7 @@ def fixed_scale_forward(net, model, sample, target_size, boxes=None):
 
     blobs_out = net.forward(**forward_kwargs)
     print('>>NET BLOB PID')
-    print(net.blobs['pid_prob'].data)
+    print(np.argmax(net.blobs['pid_prob'].data))
     return blobs_out, im_scales
 
 
@@ -280,8 +280,7 @@ def to_json_format(detections, object_class=None):
         bbox = {'x': int(det[0]), 'y': int(det[1]),
                 'w': int(det[2]-det[0]+1), 'h': int(det[3]-det[1]+1),
                 'score': float(det[4]),
-                'class': object_class if object_class is not None else int(det[5]),
-                'pid': det[6]}
+                'class': object_class if object_class is not None else int(det[5])}
         bboxes.append(bbox)
     return bboxes
 
