@@ -125,11 +125,11 @@ class RoIDataLayer(caffe.Layer):
         self._name_to_top_map['im_info'] = idx
         idx += 1
 
-        top[idx].reshape(1, 5)
+        top[idx].reshape(1, 6)
         self._name_to_top_map['gt_boxes'] = idx
         idx += 1
 
-        top[idx].reshape(1, 5)
+        top[idx].reshape(1, 6)
         self._name_to_top_map['ignored_boxes'] = idx
         idx += 1
 
@@ -201,8 +201,8 @@ def get_minibatch(samples, num_classes):
     if not samples:
         blobs = {
             'data': np.zeros((1, 3, 128, 128), dtype=np.float32),
-            'gt_boxes': np.empty(shape=(0,5), dtype=np.float32),
-            'ignored_boxes': np.empty(shape=(0,5), dtype=np.float32),
+            'gt_boxes': np.empty(shape=(0, 6), dtype=np.float32),
+            'ignored_boxes': np.empty(shape=(0, 6), dtype=np.float32),
             'im_info': np.array([[128, 128, 1]], dtype=np.float32)
         }
         return blobs, samples
@@ -281,7 +281,7 @@ def _convert_sample(sample, scale_indx):
             continue
         box = [x['x'] * ar_mult, x['y'],
                (x['x'] + x['w'] - 1) * ar_mult, x['y'] + x['h'] - 1,
-               x['class']]
+               x['class'], int(x['idname'][1:])]
         if x['ignore']:
             ignored_boxes.append(box)
         else:

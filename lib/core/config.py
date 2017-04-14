@@ -112,6 +112,18 @@ __C.TRAIN.PROPOSAL_METHOD = 'selective_search'
 # on zero-padding.
 __C.TRAIN.ASPECT_GROUPING = True
 
+# Minibatch size (number of regions of interest [ROIs])
+__C.TRAIN.BATCH_SIZE = 128
+# Fraction of minibatch that is labeled foreground (i.e. class > 0)
+__C.TRAIN.FG_FRACTION = 0.25
+# Overlap threshold for a ROI to be considered foreground (if >= FG_THRESH)
+__C.TRAIN.FG_THRESH = 0.5
+
+# Overlap threshold for a ROI to be considered background (class = 0 if
+# overlap in [LO, HI))
+__C.TRAIN.BG_THRESH_HI = 0.5
+__C.TRAIN.BG_THRESH_LO = 0.1
+
 # Use RPN to detect objects
 __C.TRAIN.HAS_RPN = False
 # IOU >= thresh: positive example

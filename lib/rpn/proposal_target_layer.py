@@ -15,8 +15,8 @@ from core.bbox_transform import bbox_transform
 from .generate_anchors import generate_anchors
 from utils.cython_bbox import bbox_overlaps
 
+DEBUG = False
 
-DEBUG = True
 
 class ProposalTargetLayer(caffe.Layer):
     """
@@ -33,7 +33,7 @@ class ProposalTargetLayer(caffe.Layer):
 
         if DEBUG:
             print('anchors:')
-            print('<<<'*100)
+            print('<<<' * 100)
             print(top[0])
             self._count = 0
             self._fg_num = 0
@@ -60,7 +60,6 @@ class ProposalTargetLayer(caffe.Layer):
         if len(top) > 5:
             top[5].reshape(1, 1)
 
-
     def forward(self, bottom, top):
 
         # Proposal ROIs (0, x1, y1, x2, y2) coming from RPN
@@ -79,7 +78,7 @@ class ProposalTargetLayer(caffe.Layer):
 
         # Sanity check: single batch only
         assert np.all(all_rois[:, 0] == 0), \
-                'Only single item batches are supported'
+            'Only single item batches are supported'
 
         num_images = 1
         rois_per_image = cfg.TRAIN.BATCH_SIZE / num_images
@@ -129,7 +128,6 @@ class ProposalTargetLayer(caffe.Layer):
             top[5].reshape(*aux_label.shape)
             top[5].data[...] = aux_label
 
-
     def backward(self, top, propagate_down, bottom):
         """This layer does not propagate gradients."""
         pass
@@ -156,7 +154,7 @@ def _get_bbox_regression_labels(bbox_target_data, num_classes):
     bbox_inside_weights = np.zeros(bbox_targets.shape, dtype=np.float32)
     inds = np.where(clss > 0)[0]
     for ind in inds:
-        cls = clss[ind]
+        cls = int(clss[ind])
         start = 4 * cls
         end = start + 4
         bbox_targets[ind, start:end] = bbox_target_data[ind, 1:]
@@ -175,11 +173,12 @@ def _compute_targets(ex_rois, gt_rois, labels):
     if cfg.TRAIN.BBOX_NORMALIZE_TARGETS_PRECOMPUTED:
         # Optionally normalize targets by a precomputed mean and stdev
         targets = ((targets - np.array(cfg.TRAIN.BBOX_NORMALIZE_MEANS))
-                / np.array(cfg.TRAIN.BBOX_NORMALIZE_STDS))
+                   / np.array(cfg.TRAIN.BBOX_NORMALIZE_STDS))
     return np.hstack(
-            (labels[:, np.newaxis], targets)).astype(np.float32, copy=False)
+        (labels[:, np.newaxis], targets)).astype(np.float32, copy=False)
 
-def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_classes):
+
+def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_classes, bg_aux_label):
     """Generate a random sample of RoIs comprising foreground and background
     examples
     """
@@ -205,10 +204,10 @@ def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_clas
     labels = gt_boxes[gt_assignment, 4]
 
     # Select foreground RoIs as those with >= FG_THRESH overlap
-    fg_inds = np.where(max_overlaps >= cfg.TRAIN.FG_THRESH)[0]
+    fg_inds = np.array(np.where(max_overlaps >= cfg.TRAIN.FG_THRESH)[0], dtype=int)
     # Guard against the case when an image has fewer than fg_rois_per_image
     # foreground RoIs
-    fg_rois_per_this_image = min(fg_rois_per_image, fg_inds.size)
+    fg_rois_per_this_image = int(min(fg_rois_per_image, fg_inds.size))
     # Sample foreground regions without replacement
     if fg_inds.size > 0:
         fg_inds = npr.choice(fg_inds, size=fg_rois_per_this_image, replace=False)
@@ -219,16 +218,16 @@ def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_clas
 
     NEAR_FRACTION = 0.2
     bg_near_cnt = int(np.floor(bg_rois_per_this_image * NEAR_FRACTION))
-    bg_near_inds = np.where((max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
-                            (max_overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
+    bg_near_inds = np.array(np.where((max_overlaps < cfg.TRAIN.BG_THRESH_HI) &
+                                     (max_overlaps >= cfg.TRAIN.BG_THRESH_LO))[0], dtype=int)
     bg_near_cnt = min(bg_near_cnt, bg_near_inds.size)
     if bg_near_inds.size > 0:
         bg_near_inds = npr.choice(bg_near_inds, size=bg_near_cnt, replace=False)
 
     bg_far_cnt = bg_rois_per_this_image - bg_near_cnt
-    bg_far_inds = (np.where(max_overlaps < 0.01)[0])[:300]
+    bg_far_inds = np.array((np.where(max_overlaps < 0.01)[0])[:300], dtype=int)
 
-    bg_far_cnt = min(bg_far_cnt, bg_far_inds.size)
+    bg_far_cnt = int(min(bg_far_cnt, bg_far_inds.size))
     bg_far_inds = npr.choice(bg_far_inds, size=bg_far_cnt, replace=False)
     bg_inds = np.append(bg_near_inds, bg_far_inds)
 

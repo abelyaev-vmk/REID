@@ -12,6 +12,8 @@ class CaffeLayer:
         self.name, self.type, self.bottoms, self.tops, self.params = name, type, bottoms, tops, params
         if self.tops is None:
             self.tops = (self.name,)
+        elif self.tops == -1:
+            self.tops = None
 
     def to_string(self, level=0):
         def params_to_str(param, level):
@@ -36,8 +38,9 @@ class CaffeLayer:
         ans = offset + 'layer {\n' + \
               offset2 + 'name: \'%s\'\n' % self.name + \
               offset2 + 'type: \'%s\'\n' % self.type
-        for top in self.tops:
-            ans += offset2 + 'top: \'%s\'\n' % top
+        if self.tops is not None:
+            for top in self.tops:
+                ans += offset2 + 'top: \'%s\'\n' % top
         for bottom in self.bottoms:
             ans += offset2 + 'bottom: \'%s\'\n' % bottom
         ans += params_to_str(self.params, level + 2) if self.params is not None else ''
@@ -94,6 +97,7 @@ class CaffeLayer:
                                        params=[['roi_pooling_param', {'pooled_h': 7,
                                                                       'pooled_w': 7,
                                                                       'spatial_scale': 0.0625}]])
+        silence_layer = CaffeLayer(name='silence', type='Silence', bottoms=('labels',), tops=-1)
 
         # ===== Fully Connected for bbox regression
         fc6_layer = CaffeLayer(name='fc6', type='InnerProduct', bottoms=('roi-pool',),
@@ -158,7 +162,7 @@ class CaffeLayer:
                                         bottoms=('pid_score', 'pid_label'),
                                         params=[['accuracy_param', {'ignore_label': -1}]])
 
-        for layer in (proposal_layer, roi_data_layer, roi_pooling_layer,
+        for layer in (proposal_layer, roi_data_layer, roi_pooling_layer, silence_layer,
                       fc6_layer, relu6_layer, drop6_layer,
                       fc7_layer, relu7_layer, drop7_layer,
                       bbox_pred_layer, loss_bbox_layer,
