@@ -12,7 +12,7 @@ import json
 
 class SmoothL1LossLayer(caffe.Layer):
     def setup(self, bottom, top):
-        layer_params = json.loads(self.param_str)
+        layer_params = json.loads(self.param_str_)
 
         self._sigma2 = layer_params.get('sigma', 1) ** 2
         self._has_weights = len(bottom) >= 3

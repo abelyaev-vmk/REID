@@ -24,7 +24,7 @@ class CoverageClassificationLayer(caffe.Layer):
 
     def setup(self, bottom, top):
 
-        layer_params = json.loads(self.param_str)
+        layer_params = json.loads(self.param_str_)
         self._feat_stride = layer_params['feat_stride']
         self._batchsize = layer_params['batchsize']
         self._fg_fraction = layer_params['fg_fraction']

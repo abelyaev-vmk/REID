@@ -26,6 +26,14 @@ from core.detector_model import DetectorModel
 from lib.layers.caffe_layer import CaffeLayer
 
 
+class python2dict(dict):
+    def __init__(self, *args, **kwargs):
+        super(python2dict, self).__init__(*args, *kwargs)
+
+    def iteritems(self):
+        return self.items()
+
+
 def _get_image_blob(sample, target_size):
     """Converts an image into a network input.
 
@@ -426,7 +434,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
     fd, test_prototxt = model.create_temp_test_prototxt()
     CaffeLayer.reid_append_test_layers(test_prototxt)
     net = caffe.Net(test_prototxt, weights_path, caffe.TEST)
-    caffe.optimize_memory(net)
+    # caffe.optimize_memory(net)
     net.name = os.path.splitext(os.path.basename(weights_path))[0]
 
     os.close(fd)

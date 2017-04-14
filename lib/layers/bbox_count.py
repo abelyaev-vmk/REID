@@ -29,7 +29,7 @@ class BboxCountLayer(caffe.Layer):
 
     def setup(self, bottom, top):
 
-        layer_params = json.loads(self.param_str)
+        layer_params = json.loads(self.param_str_)
         self._feat_stride = layer_params['feat_stride']
         self._max_count = layer_params['max_count']
         self._proj_boundaries = layer_params['proj_boundaries']

@@ -33,7 +33,7 @@ class BboxSegmentationLayer(caffe.Layer):
 
     def setup(self, bottom, top):
 
-        layer_params = json.loads(self.param_str)
+        layer_params = json.loads(self.param_str_)
         self._feat_stride = layer_params['feat_stride']
         self._iters = 0
 

@@ -39,7 +39,7 @@ class ProposalTargetLayer(caffe.Layer):
             self._fg_num = 0
             self._bg_num = 0
 
-        layer_params = yaml.load(self.param_str)
+        layer_params = yaml.load(self.param_str_)
         self._num_classes = layer_params['num_classes']
         if 'bg_aux_label' in layer_params:
             self._bg_aux_label = layer_params['bg_aux_label']
