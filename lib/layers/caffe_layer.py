@@ -225,7 +225,7 @@ class CaffeLayer:
                                                                                         'std': 0.001},
                                                                       'bias_filler': {'type': 'constant',
                                                                                       'value': 0}}]])
-
+        pid_prob_layer = CaffeLayer(name='pid_prob', type='Softmax', bottoms=('pid_score',))
         for layer in (roi_pooling_layer,
                       fc6_layer, relu6_layer, drop6_layer,
                       fc7_layer, relu7_layer, drop7_layer,
