@@ -118,7 +118,7 @@ def fixed_scale_detect(net, model, sample, target_size, boxes=None):
     blobs_out, im_scales = fixed_scale_forward(net, model, sample, target_size, boxes)
 
     rois, scores = model.extract_detections(net)
-    print('>>MODEL EXTRACTED', rois[0], scores[0])
+
     assert len(im_scales) == 1, "Only single-image batch implemented"
 
     # unscale back to raw image space
@@ -147,8 +147,6 @@ def fixed_scale_forward(net, model, sample, target_size, boxes=None):
         forward_kwargs['im_info'] = blobs['im_info'].astype(np.float32, copy=False)
 
     blobs_out = net.forward(**forward_kwargs)
-    print('>>NET BLOB PID')
-    print(np.argmax(net.blobs['pid_prob'].data))
     return blobs_out, im_scales
 
 
@@ -317,7 +315,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         _t['im_detect'].tic()
         scores, boxes = im_detect(net, model, sample)
         _t['im_detect'].toc()
-        print('IM-DETECT!:', scores[0], boxes[0])
+
         _t['misc'].tic()
 
         scores_class = scores.argmax(axis=1)
@@ -336,7 +334,7 @@ def test_image_collection(net, model, image_collection, output_dir):
             detections = \
                 np.hstack((cls_boxes, cls_scores[mask, np.newaxis], scores_class[mask].reshape((-1,1)))) \
                     .astype(np.float32, copy=False)
-            keep = nms(detections[:, :6], cfg.TEST.FINAL_NMS)
+            keep = nms(detections[:, :5], cfg.TEST.FINAL_NMS)
             detections = detections[keep]
             json_detections = to_json_format(detections)
         else:
