@@ -316,7 +316,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         _t['im_detect'].tic()
         scores, boxes = im_detect(net, model, sample)
         _t['im_detect'].toc()
-        print('IM-DETECT!:', scores, boxes)
+        print('IM-DETECT!:', scores[0], boxes[0])
         _t['misc'].tic()
 
         scores_class = scores.argmax(axis=1)
