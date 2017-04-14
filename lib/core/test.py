@@ -148,7 +148,7 @@ def fixed_scale_forward(net, model, sample, target_size, boxes=None):
 
     blobs_out = net.forward(**forward_kwargs)
     print('>>NET BLOB PID')
-    print(net.blobs['pid_score'])
+    print(net.blobs['pid_score'].data)
     return blobs_out, im_scales
 
 
