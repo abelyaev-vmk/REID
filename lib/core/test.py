@@ -118,7 +118,7 @@ def fixed_scale_detect(net, model, sample, target_size, boxes=None):
     blobs_out, im_scales = fixed_scale_forward(net, model, sample, target_size, boxes)
 
     rois, scores = model.extract_detections(net)
-    print('>>MODEL EXTRACTED', rois, scores)
+    print('>>MODEL EXTRACTED', rois[0], scores[0])
     assert len(im_scales) == 1, "Only single-image batch implemented"
 
     # unscale back to raw image space
