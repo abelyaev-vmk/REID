@@ -87,9 +87,13 @@ class SolverWrapper(object):
         iters_info = []
         while self.solver.iter < max_iters:
             # Make one SGD update
+            print('new loop')
             timer.tic()
             self.solver.net.layers[0].next_blob()
+            print('blob ok')
+            print(self.solver.net.layers[0])
             self.solver.step(1)
+            print('step ok')
             timer.toc()
             if self.solver.iter % (10 * self.solver_param.display) == 0:
                 print('speed: {:.3f}s / iter'.format(timer.average_time))
