@@ -9,3 +9,4 @@
 # Project specific
 */logs
 */*/logs
+*.caffemodel
