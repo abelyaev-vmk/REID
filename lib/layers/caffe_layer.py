@@ -167,7 +167,7 @@ class CaffeLayer:
                       bbox_pred_layer, loss_bbox_layer,
                       feat_layer, relu8_layer, drop8_layer,
                       pid_score_layer, pid_loss_layer, pid_accuracy_layer):
-            #layer.append_to_solver(solver_prototxt)
+            layer.append_to_solver(solver_prototxt)
             pass
 
     @staticmethod
