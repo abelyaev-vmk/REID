@@ -185,7 +185,7 @@ class RoIDataLayer(caffe.Layer):
                 print('Reshape')
                 # Copy data into net's input blobs
                 top[top_ind].data[...] = blob.astype(np.float32, copy=False)
-        print('fot loop done')
+        print('for loop done')
 
         if not samples:
             return
