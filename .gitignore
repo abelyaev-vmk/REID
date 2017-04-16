@@ -13,3 +13,7 @@
 data/
 */*/output
 */*/logs
+lib/caffe_model/__pycache__/
+lib/core/__pycache__/
+lib/layers/__pycache__/
+lib/rpn/__pycache__/
