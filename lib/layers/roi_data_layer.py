@@ -172,10 +172,8 @@ class RoIDataLayer(caffe.Layer):
         self._forward_images += samples
 
         for blob_name, blob in self._blobs.items():
-            print(blob_name, blob)
             top_ind = self._name_to_top_map[blob_name]
             # Reshape net's input blobs
-            print(blob.shape)
             if blob.shape[0]:
                 top[top_ind].reshape(*(blob.shape))
                 # Copy data into net's input blobs
@@ -183,8 +181,8 @@ class RoIDataLayer(caffe.Layer):
 
         if not samples:
             return
-        for sample in samples:
-            print(sample.id, len(sample.marking), sample.max_size)
+        # for sample in samples:
+        #     print(sample.id, len(sample.marking), sample.max_size)
 
         self._losses.append(self.get_last_loss())
 
