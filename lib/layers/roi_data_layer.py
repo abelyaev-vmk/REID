@@ -168,33 +168,25 @@ class RoIDataLayer(caffe.Layer):
 
     def forward(self, bottom, top):
         """Get blobs and copy them into this layer's top blob vector."""
-        print('ROIdata forward')
         self._blobs, samples = self._get_next_minibatch()
         self._forward_images += samples
-        print('Got minibatches')
 
         for blob_name, blob in self._blobs.items():
             print(blob_name, blob)
-            print('Start new loop')
             top_ind = self._name_to_top_map[blob_name]
-            print('Get names')
             # Reshape net's input blobs
             print(blob.shape)
             if blob.shape[0]:
                 top[top_ind].reshape(*(blob.shape))
-                print('Reshape')
                 # Copy data into net's input blobs
                 top[top_ind].data[...] = blob.astype(np.float32, copy=False)
-        print('for loop done')
 
         if not samples:
             return
-        # for sample in samples:
-        #     print(sample.id, len(sample.marking), sample.max_size)
+        for sample in samples:
+            print(sample.id, len(sample.marking), sample.max_size)
 
         self._losses.append(self.get_last_loss())
-        return
-
 
 
     def backward(self, top, propagate_down, bottom):

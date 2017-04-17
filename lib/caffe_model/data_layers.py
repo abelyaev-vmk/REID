@@ -15,7 +15,7 @@ class PythonDataLayer(PythonLayer):
         super(PythonDataLayer, self).__init__(name, 'layers.roi_data_layer.RoIDataLayer',
                                               layer_params, 0, 4)
 
-        for slot, dim in zip(self.slots_out, [[1, 3, 224, 224], [1, 5], [1,5], [1,5]]):
+        for slot, dim in zip(self.slots_out, [[1, 3, 224, 224], [1, 5], [1, 6], [1, 6]]):
             slot.dim = dim
 
     def slots_out_names(self):

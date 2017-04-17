@@ -67,6 +67,7 @@ if __name__ == '__main__':
     # set up caffe
     caffe.set_mode_gpu()
     caffe.set_device(args.gpu_id)
+    # caffe.set_mode_cpu()
 
     time_suffix = 'train_' + datetime.datetime.now().strftime("%d_%m_%Y_%H_%M")
     output_dir = get_output_dir(time_suffix, None)
