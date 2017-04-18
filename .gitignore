@@ -1,5 +1,5 @@
 .DS_Store
-**.pyc
+**/*.pyc
 
 #IDEA specific
 .idea/
@@ -11,4 +11,4 @@
 data/
 */*/output
 **/logs
-**/__pycache__/
+**/__pycache__
