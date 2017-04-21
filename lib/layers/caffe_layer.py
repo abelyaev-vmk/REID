@@ -161,7 +161,7 @@ class CaffeLayer:
                                         bottoms=('pid_score', 'pid_label'),
                                         params=[['accuracy_param', {'ignore_label': -1}]])
 
-        silence_layer = CaffeLayer(name='silence', type='Silence', bottoms=('labels',), tops=-1)
+        silence_layer = CaffeLayer(name='silence', type='Silence', bottoms=('labels',), tops=[])
 
         for layer in (proposal_layer, roi_data_layer, roi_pooling_layer,
                       fc6_layer, relu6_layer, drop6_layer,
