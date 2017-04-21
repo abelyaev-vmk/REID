@@ -168,7 +168,8 @@ class CaffeLayer:
                       fc7_layer, relu7_layer, drop7_layer,
                       bbox_pred_layer, loss_bbox_layer,
                       feat_layer, relu8_layer, drop8_layer,
-                      pid_score_layer, pid_loss_layer, pid_accuracy_layer,
+                      pid_score_layer,
+                      #pid_loss_layer, pid_accuracy_layer,
                       silence_layer):
             layer.append_to_solver(solver_prototxt)
             pass
