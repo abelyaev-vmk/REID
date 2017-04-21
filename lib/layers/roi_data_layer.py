@@ -203,8 +203,8 @@ def get_minibatch(samples, num_classes):
     if not samples:
         blobs = {
             'data': np.zeros((1, 3, 128, 128), dtype=np.float32),
-            'gt_boxes': np.empty(shape=(0,6), dtype=np.float32),
-            'ignored_boxes': np.empty(shape=(0,6), dtype=np.float32),
+            'gt_boxes': np.empty(shape=(0, 6), dtype=np.float32),
+            'ignored_boxes': np.empty(shape=(0, 6), dtype=np.float32),
             'im_info': np.array([[128, 128, 1]], dtype=np.float32)
         }
         return blobs, samples

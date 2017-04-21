@@ -150,16 +150,16 @@ class CaffeLayer:
                                                                                         'std': 0.001},
                                                                       'bias_filler': {'type': 'constant',
                                                                                       'value': 0}}]])
-        pid_loss_layer = CaffeLayer(name='pid_loss', type='RandomSamplingSoftmaxLoss',
-                                    bottoms=('pid_score', 'pid_label'),
-                                    params=[['propagate_down', 1],
-                                            ['propagate_down', 0],
-                                            ['loss_weight', 1],
-                                            ['loss_param', {'ignore_label': -1,
-                                                            'normalize': True}]])
-        pid_accuracy_layer = CaffeLayer(name='pid_accuracy', type='Accuracy',
-                                        bottoms=('pid_score', 'pid_label'),
-                                        params=[['accuracy_param', {'ignore_label': -1}]])
+        # pid_loss_layer = CaffeLayer(name='pid_loss', type='RandomSamplingSoftmaxLoss',
+        #                             bottoms=('pid_score', 'pid_label'),
+        #                             params=[['propagate_down', 1],
+        #                                     ['propagate_down', 0],
+        #                                     ['loss_weight', 1],
+        #                                     ['loss_param', {'ignore_label': -1,
+        #                                                     'normalize': True}]])
+        # pid_accuracy_layer = CaffeLayer(name='pid_accuracy', type='Accuracy',
+        #                                 bottoms=('pid_score', 'pid_label'),
+        #                                 params=[['accuracy_param', {'ignore_label': -1}]])
 
         silence_layer = CaffeLayer(name='silence', type='Silence', bottoms=('labels',), tops=[])
 
