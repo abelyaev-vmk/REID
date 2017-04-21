@@ -150,7 +150,7 @@ class CaffeLayer:
                                                                                         'std': 0.001},
                                                                       'bias_filler': {'type': 'constant',
                                                                                       'value': 0}}]])
-        pid_loss_layer = CaffeLayer(name='pid_loss', type='RandomSamplingSoftmax',
+        pid_loss_layer = CaffeLayer(name='pid_loss', type='RandomSamplingSoftmaxLoss',
                                     bottoms=('pid_score', 'pid_label'),
                                     params=[['propagate_down', 1],
                                             ['propagate_down', 0],
