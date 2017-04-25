@@ -179,6 +179,7 @@ def _compute_targets(ex_rois, gt_rois, labels):
     return np.hstack(
         (labels[:, np.newaxis], targets)).astype(np.float32, copy=False)
 
+
 def _sample_rois(all_rois, gt_boxes, fg_rois_per_image, rois_per_image, num_classes, bg_aux_label):
     """Generate a random sample of RoIs comprising foreground and background
     examples
