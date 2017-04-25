@@ -323,7 +323,8 @@ def test_image_collection(net, model, image_collection, output_dir):
         _t['im_detect'].tic()
         scores, boxes = im_detect(net, model, sample)
         cls = net.blobs['feat'].data.copy().ravel()
-        print(cls)
+        top5 = np.argsort(cls)[::-1][:5]
+        print(top5)
         _t['im_detect'].toc()
 
         _t['misc'].tic()
