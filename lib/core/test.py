@@ -476,7 +476,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
 
             with open(output_path, 'w') as f:
                 json.dump(total_result, f, indent=2)
-            with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'w') as f:
+            with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'wb') as f:
                 pickle.dump(tops, f)
         else:
             extractor = extract_regions_image_collection(net, model, image_collection)
@@ -492,7 +492,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(output_path, 'wb') as f:
                 pickle.dump(total_result, f, protocol=pickle.HIGHEST_PROTOCOL)
 
-            with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'w') as f:
+            with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'wb') as f:
                 pickle.dump(tops, f)
 
         print('Output detections file: %s\n' % output_path)
