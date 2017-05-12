@@ -467,7 +467,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
             extractor = test_image_collection(net, model, image_collection, output_dir)
             total_result = None
             tops = []
-            for (image_indx, result), top5 in enumerate(extractor):
+            for image_indx, (result, top5) in enumerate(extractor):
                 tops.append(top5)
                 total_result = result
                 if image_indx % 1000 == 0:
@@ -482,7 +482,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
             extractor = extract_regions_image_collection(net, model, image_collection)
             total_result = None
             tops = []
-            for (image_indx, result), top5 in enumerate(extractor):
+            for image_indx, (result, top5) in enumerate(extractor):
                 tops.append(top5)
                 total_result = result
                 if image_indx % 500 == 0:
