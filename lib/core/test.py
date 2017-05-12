@@ -324,7 +324,6 @@ def test_image_collection(net, model, image_collection, output_dir):
         scores, boxes = im_detect(net, model, sample)
         cls = net.blobs['feat'].data.copy().ravel()
         top5 = np.argsort(cls)[::-1][:5]
-        print(top5)
         _t['im_detect'].toc()
 
         _t['misc'].tic()
@@ -392,7 +391,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         print('im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
               .format(indx + 1, len(image_collection),
                       _t['im_detect'].average_time, _t['misc'].average_time))
-        yield all_detections
+        yield all_detections, top5
 
 
 def extract_regions_image_collection(net, model, image_collection):
@@ -467,8 +466,9 @@ def test_net(weights_path, output_dir, dataset_names=None):
         if not image_collection.extract_clusters:
             extractor = test_image_collection(net, model, image_collection, output_dir)
             total_result = None
-
-            for image_indx, result in enumerate(extractor):
+            tops = []
+            for (image_indx, result), top5 in enumerate(extractor):
+                tops.append(top5)
                 total_result = result
                 if image_indx % 1000 == 0:
                     with open(output_path, 'w') as f:
@@ -476,10 +476,14 @@ def test_net(weights_path, output_dir, dataset_names=None):
 
             with open(output_path, 'w') as f:
                 json.dump(total_result, f, indent=2)
+            with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'w') as f:
+                pickle.dump(tops, f)
         else:
             extractor = extract_regions_image_collection(net, model, image_collection)
             total_result = None
-            for image_indx, result in enumerate(extractor):
+            tops = []
+            for (image_indx, result), top5 in enumerate(extractor):
+                tops.append(top5)
                 total_result = result
                 if image_indx % 500 == 0:
                     with open(output_path, 'wb') as f:
@@ -488,4 +492,8 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(output_path, 'wb') as f:
                 pickle.dump(total_result, f, protocol=pickle.HIGHEST_PROTOCOL)
 
+            with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'w') as f:
+                pickle.dump(tops, f)
+
         print('Output detections file: %s\n' % output_path)
+        print('File with tops: %s\n' % os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'))
