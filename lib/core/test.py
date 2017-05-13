@@ -430,6 +430,10 @@ def extract_regions_image_collection(net, model, image_collection):
         yield result
 
 
+def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.prototxt', dataset_names=None):
+    net = caffe.Net(test_prototxt, weights_path, caffe.TEST)
+
+
 def test_net(weights_path, output_dir, dataset_names=None):
     model = DetectorModel(cfg.MODEL)
 

@@ -11,7 +11,7 @@
 """Test a Fast R-CNN network on an image database."""
 
 import _init_paths
-from core.test import test_net
+from core.test import test_net, test_query
 from core.config import cfg, cfg_from_file, cfg_from_list
 from core.config import get_output_dir
 import caffe
@@ -74,4 +74,5 @@ if __name__ == '__main__':
         output_dir_name += '_' + '_'.join(args.datasets)
     output_dir_name += '_' + datetime.datetime.now().strftime("%d_%m_%Y_%H_%M")
     output_dir = get_output_dir(output_dir_name, None)
-    test_net(args.caffemodel, output_dir, args.datasets)
+    # test_net(args.caffemodel, output_dir, args.datasets)
+    test_query(args.caffemodel, output_dir, args.datasets)
