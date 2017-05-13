@@ -435,8 +435,9 @@ def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.
     # fd, test_prototxt = model.create_temp_test_prototxt()
     # print(test_prototxt)
     model = DetectorModel(cfg.MODEL)
-    fd, test_prototxt = model.create_temp_test_prototxt()
-    CaffeLayer.reid_append_test_layers(test_prototxt)
+    fd, test_prototxt2 = model.create_temp_test_prototxt()
+    print(test_prototxt2)
+    CaffeLayer.reid_append_test_layers(test_prototxt2)
     net = caffe.Net(test_prototxt, weights_path, caffe.TEST)
 
 
