@@ -436,11 +436,12 @@ def test_image_collection(net, model, image_collection, output_dir):
                     .astype(np.float32, copy=False)
             keep = nms(detections[:, :5], cfg.TEST.FINAL_NMS)
             detections = detections[keep]
-            json_detections = to_json_format(detections, feats)
             feats = cls[keep]
+            json_detections = to_json_format(detections, feats)
+
         else:
             json_detections = []
-            feats = []
+
 
         # json_detections = []
         # for j in range(1, scores.shape[1]):
@@ -460,7 +461,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         #
         #     json_detections += to_json_format(detections, j)
 
-        all_detections[image_basename] = [json_detections, feats]
+        all_detections[image_basename] = [json_detections]
 
         if cfg.TEST.VIZUALIZATION.ENABLE:
             score_thresh = cfg.TEST.VIZUALIZATION.SCORE_THRESH
