@@ -433,6 +433,9 @@ def extract_regions_image_collection(net, model, image_collection):
 def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.prototxt', dataset_names=None):
     net = caffe.Net('models/vgg16/test_query_norm.prototxt', weights_path, caffe.TEST)
     net.name = os.path.splitext(os.path.basename(weights_path))[0]
+    args = net.forward()
+    print(args)
+    print('\n')
     print(net.name)
 
 
