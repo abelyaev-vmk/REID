@@ -56,7 +56,7 @@ def load_probe(rois_dir, images_dir):
     import numpy as np
     protoc = json.load(open(osp.join(rois_dir, 'videoset.json'), 'r'))
     images, rois = [], []
-    for im_name in protoc:
+    for im_name in protoc.keys():
         for item in protoc[im_name]:
             box = np.array([item['x'], item['y'], item['w'], item['h']])
             box[2:] += box[:2]

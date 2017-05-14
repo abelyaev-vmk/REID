@@ -464,7 +464,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         #
         #     json_detections += to_json_format(detections, j)
 
-        all_detections[image_basename] = [json_detections]
+        all_detections[image_basename] = json_detections
         all_feats.append([image_basename, feats])
 
         if cfg.TEST.VIZUALIZATION.ENABLE:
