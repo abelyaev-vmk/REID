@@ -65,6 +65,10 @@ def load_probe(rois_dir, images_dir):
     return protoc, images, rois
 
 
+def evaluate(log_dir):
+    pass
+
+
 if __name__ == '__main__':
     args = parse_args()
 
@@ -101,3 +105,5 @@ if __name__ == '__main__':
 
     net = caffe.Net('models/vgg16/test_query_norm.prototxt', args.caffemodel, caffe.TEST)
     test_net_on_probe_set(net, probe_images, probe_rois, 'feat', rois_dir)
+
+    evaluate(rois_dir)

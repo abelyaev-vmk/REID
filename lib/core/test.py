@@ -311,6 +311,92 @@ def plot_bboxes(image, bboxes, color=(0,255,0), line_width=2, show_scores=False)
     return ret_image
 
 
+def im_detect2(net, im, feat_blob, boxes=None):
+    """Detect object classes in an image given object proposals.
+
+    Arguments:
+        net (caffe.Net): Fast R-CNN network to use
+        im (ndarray): color image to test (in BGR order)
+        feat_blob (str): name of the feature blob to be extracted
+        boxes (ndarray): R x 4 array of object proposals or None (for RPN)
+
+    Returns:
+        scores (ndarray): R x K array of object class scores (K includes
+            background as object category 0)
+        boxes (ndarray): R x (4*K) array of predicted bounding boxes
+        features (ndarray): R x D array of features
+    """
+    blobs, im_scales = _get_blobs(im, boxes)
+
+    # When mapping from image ROIs to feature map ROIs, there's some aliasing
+    # (some distinct image ROIs get mapped to the same feature ROI).
+    # Here, we identify duplicate feature ROIs, so we only compute features
+    # on the unique subset.
+    if cfg.DEDUP_BOXES > 0 and not cfg.TEST.HAS_RPN:
+        v = np.array([1, 1e3, 1e6, 1e9, 1e12])
+        hashes = np.round(blobs['rois'] * cfg.DEDUP_BOXES).dot(v)
+        _, index, inv_index = np.unique(hashes, return_index=True,
+                                        return_inverse=True)
+        blobs['rois'] = blobs['rois'][index, :]
+        boxes = boxes[index, :]
+
+    if cfg.TEST.HAS_RPN:
+        im_blob = blobs['data']
+        blobs['im_info'] = np.array(
+            [[im_blob.shape[2], im_blob.shape[3], im_scales[0]]],
+            dtype=np.float32)
+
+    # reshape network inputs
+    net.blobs['data'].reshape(*(blobs['data'].shape))
+    if cfg.TEST.HAS_RPN:
+        net.blobs['im_info'].reshape(*(blobs['im_info'].shape))
+    else:
+        net.blobs['rois'].reshape(*(blobs['rois'].shape))
+
+    # do forward
+    forward_kwargs = {'data': blobs['data'].astype(np.float32, copy=False)}
+    if cfg.TEST.HAS_RPN:
+        forward_kwargs['im_info'] = blobs['im_info'].astype(np.float32, copy=False)
+    else:
+        forward_kwargs['rois'] = blobs['rois'].astype(np.float32, copy=False)
+    blobs_out = net.forward(**forward_kwargs)
+
+    if cfg.TEST.HAS_RPN:
+        assert len(im_scales) == 1, "Only single-image batch implemented"
+        rois = net.blobs['rois'].data.copy()
+        # unscale back to raw image space
+        boxes = rois[:, 1:5] / im_scales[0]
+
+    if cfg.TEST.SVM:
+        # use the raw scores before softmax under the assumption they
+        # were trained as linear SVMs
+        scores = net.blobs['cls_score'].data
+    else:
+        # the last column of the pid_prob is the non-person box score
+        scores = blobs_out['pid_prob'][:, -1]
+        scores = scores[:, np.newaxis]
+        scores = np.hstack([scores, 1. - scores])
+
+    if cfg.TEST.BBOX_REG:
+        # Apply bounding-box regression deltas
+        box_deltas = blobs_out['bbox_pred']
+        pred_boxes = bbox_transform_inv(boxes, box_deltas)
+        pred_boxes = clip_boxes(pred_boxes, im.shape)
+    else:
+        # Simply repeat the boxes, once for each class
+        pred_boxes = np.tile(boxes, (1, scores.shape[1]))
+
+    features = net.blobs[feat_blob].data.copy()
+
+    if cfg.DEDUP_BOXES > 0 and not cfg.TEST.HAS_RPN:
+        # Map scores and predictions back to the original set of boxes
+        scores = scores[inv_index, :]
+        pred_boxes = pred_boxes[inv_index, :]
+        features = features[inv_index, :]
+
+    return scores, pred_boxes, features
+
+
 def test_image_collection(net, model, image_collection, output_dir):
     max_per_image = cfg.TEST.MAX_PER_IMAGE
     SCORE_THRESH = 0.05
@@ -321,8 +407,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         image_basename = str(PurePath(sample.id).relative_to(image_collection.imgs_path))
 
         _t['im_detect'].tic()
-        scores, boxes = im_detect(net, model, sample)
-        cls = net.blobs['feat'].data.copy().ravel()
+        scores, boxes, cls = im_detect2(net, model, 'feat', sample)
         _t['im_detect'].toc()
 
         _t['misc'].tic()
@@ -481,6 +566,9 @@ def test_net(weights_path, output_dir, dataset_names=None):
             total_result = None
             tops = []
             for image_indx, (result, cls) in enumerate(extractor):
+                print(cls)
+                print(np.array(cls).shape)
+                exit(0)
                 tops.append(cls)
                 total_result = result
                 if image_indx % 1000 == 0:
@@ -492,7 +580,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(os.path.join(last_run_path, 'videoset.json'), 'w') as f:
                 json.dump(total_result, f, indent=2)
 
-            np.save(os.path.join(last_run_path, 'gallery_features.pckl'), np.array(tops))
+            np.save(os.path.join(last_run_path, 'gallery_features'), np.array(tops))
         else:
             extractor = extract_regions_image_collection(net, model, image_collection)
             total_result = None
