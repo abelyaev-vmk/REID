@@ -436,11 +436,11 @@ def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.
     probs, blocks = [], []
     for _ in range(100):
         args = net.forward()
-        print(args)
         probs.append(args['pid_prob'])
         blocks.append(args['bbox_pred'])
     np.save('logs/last_run/probs.npy', np.array(probs))
     np.save('logs/last_run/blocks.npy', np.array(blocks))
+    print(min(list(map(lambda p: np.argsort(p)[::-1], np.array(probs).reshape(100 * 16, 5533)))))
 
 
 def test_net(weights_path, output_dir, dataset_names=None):
