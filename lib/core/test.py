@@ -590,7 +590,8 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(os.path.join(last_run_path, 'videoset.json'), 'w') as f:
                 json.dump(total_result, f, indent=2)
 
-            json.dump(total_feats.tolist(), open(os.path.join(last_run_path, 'gallery_features.pkl'), 'w'))
+            json.dump(list(map(lambda tf: np.array(tf).tolist(), total_feats)),
+                      open(os.path.join(last_run_path, 'gallery_features.pkl'), 'w'))
         else:
             extractor = extract_regions_image_collection(net, model, image_collection)
             total_result = None
@@ -607,7 +608,8 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(os.path.join(last_run_path, 'videoset.json'), 'w') as f:
                 json.dump(total_result, f, indent=2)
 
-            json.dump(total_feats.tolist(), open(os.path.join(last_run_path, 'gallery_features.pkl'), 'w'))
+            json.dump(list(map(lambda tf: np.array(tf).tolist(), total_feats)),
+                      open(os.path.join(last_run_path, 'gallery_features.pkl'), 'w'))
 
         print('Output detections file: %s\n' % output_path)
         print('File with tops: %s\n' % os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'))
