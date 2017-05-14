@@ -290,7 +290,7 @@ def to_json_format(detections, feats=None, object_class=None):
                 'w': int(det[2]-det[0]+1), 'h': int(det[3]-det[1]+1),
                 'score': float(det[4]),
                 'class': object_class if object_class is not None else int(det[5]),
-                'feat': feats[num] if feats is not None else None}
+                'feat': list(feats[num]) if feats is not None else None}
         bboxes.append(bbox)
     return bboxes
 
@@ -436,7 +436,7 @@ def test_image_collection(net, model, image_collection, output_dir):
                     .astype(np.float32, copy=False)
             keep = nms(detections[:, :5], cfg.TEST.FINAL_NMS)
             detections = detections[keep]
-            feats = list(cls[keep])
+            feats = cls[keep]
             json_detections = to_json_format(detections, feats)
 
         else:
