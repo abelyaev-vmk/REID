@@ -28,8 +28,8 @@ class TestDataLayer(caffe.Layer):
         for i in range(self.batch_size):
             img, roi = self.load_image_and_rois(self.idx)
             print(self.rois[self.idx][0])
-            top[0].data[self.idx, ...] = img
-            top[1].data[self.idx, ...] = [1, 1, 2, 2]
+            top[0].data[i, ...] = img
+            top[1].data[i, ...] = [1, 1, 2, 2]
             self.idx += 1
             self.idx = self.idx % len(self.rois)
 
