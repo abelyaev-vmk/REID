@@ -436,7 +436,7 @@ def test_image_collection(net, model, image_collection, output_dir):
                     .astype(np.float32, copy=False)
             keep = nms(detections[:, :5], cfg.TEST.FINAL_NMS)
             detections = detections[keep]
-            feats = cls[keep]
+            feats = list(cls[keep])
             json_detections = to_json_format(detections, feats)
 
         else:
