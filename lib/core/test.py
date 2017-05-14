@@ -413,8 +413,6 @@ def test_image_collection(net, model, image_collection, output_dir):
         # scores, boxes, cls = im_detect2(net, sample, 'feat')
         scores, boxes = im_detect(net, model, sample)
         cls = net.blobs['pid_score'].data.copy()
-        print(cls.shape)
-        exit(0)
         _t['im_detect'].toc()
 
         _t['misc'].tic()
@@ -438,6 +436,10 @@ def test_image_collection(net, model, image_collection, output_dir):
             keep = nms(detections[:, :5], cfg.TEST.FINAL_NMS)
             detections = detections[keep]
             json_detections = to_json_format(detections)
+            print(keep)
+            print(detections)
+            print(cls[keep].shape)
+            exit(0)
         else:
             json_detections = []
 
