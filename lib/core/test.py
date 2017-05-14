@@ -464,7 +464,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
 
     for indx, dataset in enumerate(datasets):
         image_collection = ImagesCollection(dataset)
-
+        last_run_path = 'logs/last_run/videoset.json'
         print("# %d/%d dataset %s: %d images" %
               (indx + 1, len(cfg.TEST.DATASETS), dataset.PATH, len(image_collection)))
 
@@ -482,6 +482,9 @@ def test_net(weights_path, output_dir, dataset_names=None):
 
             with open(output_path, 'w') as f:
                 json.dump(total_result, f, indent=2)
+            with open(last_run_path, 'w') as f:
+                json.dump(total_result, f, indent=2)
+
             with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'wb') as f:
                 pickle.dump(tops, f)
         else:
@@ -496,6 +499,8 @@ def test_net(weights_path, output_dir, dataset_names=None):
                         pickle.dump(result, f, protocol=pickle.HIGHEST_PROTOCOL)
 
             with open(output_path, 'wb') as f:
+                pickle.dump(total_result, f, protocol=pickle.HIGHEST_PROTOCOL)
+            with open(last_run_path, 'wb') as f:
                 pickle.dump(total_result, f, protocol=pickle.HIGHEST_PROTOCOL)
 
             with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'wb') as f:
