@@ -27,6 +27,7 @@ class TestDataLayer(caffe.Layer):
     def forward(self, bottom, top):
         for i in range(self.batch_size):
             img, roi = self.load_image_and_rois(self.idx)
+            print(self.rois[self.idx][0])
             top[0].data[self.idx, ...] = img
             top[1].data[self.idx, ...] = roi
             self.idx += 1
