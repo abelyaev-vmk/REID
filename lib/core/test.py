@@ -323,7 +323,6 @@ def test_image_collection(net, model, image_collection, output_dir):
         _t['im_detect'].tic()
         scores, boxes = im_detect(net, model, sample)
         cls = net.blobs['feat'].data.copy().ravel()
-        top5 = np.argsort(cls)[::-1][:5]
         _t['im_detect'].toc()
 
         _t['misc'].tic()
@@ -391,7 +390,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         print('im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
               .format(indx + 1, len(image_collection),
                       _t['im_detect'].average_time, _t['misc'].average_time))
-        yield all_detections, top5
+        yield all_detections, cls
 
 
 def extract_regions_image_collection(net, model, image_collection):
@@ -481,8 +480,8 @@ def test_net(weights_path, output_dir, dataset_names=None):
             extractor = test_image_collection(net, model, image_collection, output_dir)
             total_result = None
             tops = []
-            for image_indx, (result, top5) in enumerate(extractor):
-                tops.append(top5)
+            for image_indx, (result, cls) in enumerate(extractor):
+                tops.append(cls)
                 total_result = result
                 if image_indx % 1000 == 0:
                     with open(output_path, 'w') as f:
@@ -511,7 +510,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(last_run_path, 'wb') as f:
                 pickle.dump(total_result, f, protocol=pickle.HIGHEST_PROTOCOL)
 
-            with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'wb') as f:
+            with open(os.path.join(last_run_path, 'gallery_features.pckl'), 'wb') as f:
                 pickle.dump(tops, f)
 
         print('Output detections file: %s\n' % output_path)
