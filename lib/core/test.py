@@ -433,11 +433,14 @@ def extract_regions_image_collection(net, model, image_collection):
 def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.prototxt', dataset_names=None):
     net = caffe.Net('models/vgg16/test_query_norm.prototxt', weights_path, caffe.TEST)
     net.name = os.path.splitext(os.path.basename(weights_path))[0]
-    args = []
+    probs, blocks = [], []
     for _ in range(100):
-        args.append(net.forward()['pid_prob'])
-    print(np.min(np.array(args).ravel()))
-    # print(list(map(np.argmax, args['pid_prob'])))
+        args = net.forward()
+        print(args)
+        probs.append(args['pid_prob'])
+        blocks.append(args['block_predict'])
+    np.save('logs/last_run/probs.npy', np.array(probs))
+    np.save('logs/last_run/blocks.npy', np.array(blocks))
 
 
 def test_net(weights_path, output_dir, dataset_names=None):
