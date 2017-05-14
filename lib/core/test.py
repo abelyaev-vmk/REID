@@ -329,7 +329,7 @@ def im_detect2(net, im, feat_blob, boxes=None):
         boxes (ndarray): R x (4*K) array of predicted bounding boxes
         features (ndarray): R x D array of features
     """
-    blobs, im_scales = _get_blobs(im, boxes)
+    blobs, im_scales = _get_blobs(im, cfg.TEST.SCALES[0])
 
     # When mapping from image ROIs to feature map ROIs, there's some aliasing
     # (some distinct image ROIs get mapped to the same feature ROI).
