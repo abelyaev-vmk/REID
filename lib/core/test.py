@@ -439,6 +439,8 @@ def test_image_collection(net, model, image_collection, output_dir):
             detections = detections[keep]
             feats = cls[keep]
             print(feats)
+            if len(keep) == 1:
+                feats = [feats]
             json_detections = to_json_format(detections, feats)
 
         else:
