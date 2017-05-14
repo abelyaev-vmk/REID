@@ -11,7 +11,7 @@ class TestDataLayer(caffe.Layer):
         self.path_to_dataset = cfg.TEST.DATASETS[0].PATH
         self.rois = self.parse_json(json.load(open('logs/last_run/videoset.json', 'r')))
         self.idx = 0
-        self.batch_size = 16
+        self.batch_size = 1
 
     # initialize layer's shape
     def reshape(self, bottom, top):
@@ -54,4 +54,4 @@ class TestDataLayer(caffe.Layer):
         im_scale = 244
         img = cv.resize(img, (244, 244), interpolation=cv.INTER_LINEAR)
         img = img.transpose((2, 0, 1))
-        return img, [y1, x1, y2, x2]
+        return img, [x1, y1, x2, y2]
