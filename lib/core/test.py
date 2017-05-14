@@ -116,7 +116,7 @@ def _project_im_rois(im_rois, scales):
 
 def _get_blobs(sample, target_size, rois):
     """Convert an image and RoIs within that image into network inputs."""
-    blobs = {'data' : None, 'rois' : None}
+    blobs = {'data': None, 'rois': None}
     blobs['data'], im_scale_factors = _get_image_blob(sample, target_size)
 
     return blobs, im_scale_factors
@@ -431,14 +431,9 @@ def extract_regions_image_collection(net, model, image_collection):
 
 
 def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.prototxt', dataset_names=None):
-    # model = DetectorModel(cfg.MODEL)
-    # fd, test_prototxt = model.create_temp_test_prototxt()
-    # print(test_prototxt)
-    model = DetectorModel(cfg.MODEL)
-    fd, test_prototxt2 = model.create_temp_test_prototxt()
-    print(test_prototxt2)
-    CaffeLayer.reid_append_test_layers(test_prototxt2)
-    net = caffe.Net(test_prototxt, weights_path, caffe.TEST)
+    net = caffe.Net('models/vgg16/test_query_norm.prototxt', weights_path, caffe.TEST)
+    net.name = os.path.splitext(os.path.basename(weights_path))[0]
+    print(net.name)
 
 
 def test_net(weights_path, output_dir, dataset_names=None):

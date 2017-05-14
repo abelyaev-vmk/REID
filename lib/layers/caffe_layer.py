@@ -239,3 +239,9 @@ class CaffeLayer:
                       feat_layer, relu8_layer, drop8_layer,
                       pid_score_layer):
             layer.append_to_solver(solver_prototxt)
+
+    @staticmethod
+    def change_proto(file_proto, new_proto):
+        print(file_proto, new_proto)
+        fp, np = open(file_proto, 'w'), open(new_proto, 'r')
+        fp.writelines(np.readlines())
