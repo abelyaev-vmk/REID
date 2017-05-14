@@ -74,5 +74,5 @@ if __name__ == '__main__':
         output_dir_name += '_' + '_'.join(args.datasets)
     output_dir_name += '_' + datetime.datetime.now().strftime("%d_%m_%Y_%H_%M")
     output_dir = get_output_dir(output_dir_name, None)
-    test_net(args.caffemodel, output_dir, args.datasets)
-    # test_query(args.caffemodel, output_dir, args.datasets)
+    # test_net(args.caffemodel, output_dir, args.datasets)
+    test_query(args.caffemodel, output_dir, args.datasets)

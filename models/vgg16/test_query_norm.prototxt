@@ -28,7 +28,7 @@ layer {
   python_param {
     module: "layers.DataLayer"
     layer: "TestDataLayer"
-    param_str: "123"
+    param_str: "PATH/TO/DATASET"
   }
   include {
     phase: TEST
