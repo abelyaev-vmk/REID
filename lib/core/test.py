@@ -471,7 +471,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
 
     for indx, dataset in enumerate(datasets):
         image_collection = ImagesCollection(dataset)
-        last_run_path = 'logs/last_run/videoset.json'
+        last_run_path = 'logs/last_run'
         print("# %d/%d dataset %s: %d images" %
               (indx + 1, len(cfg.TEST.DATASETS), dataset.PATH, len(image_collection)))
 
@@ -489,17 +489,16 @@ def test_net(weights_path, output_dir, dataset_names=None):
 
             with open(output_path, 'w') as f:
                 json.dump(total_result, f, indent=2)
-            with open(last_run_path, 'w') as f:
+            with open(os.path.join(last_run_path, 'videoset.json'), 'w') as f:
                 json.dump(total_result, f, indent=2)
 
-            with open(os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'), 'wb') as f:
-                pickle.dump(tops, f)
+            np.save(os.path.join(last_run_path, 'gallery_features.pckl'), np.array(tops))
         else:
             extractor = extract_regions_image_collection(net, model, image_collection)
             total_result = None
             tops = []
-            for image_indx, (result, top5) in enumerate(extractor):
-                tops.append(top5)
+            for image_indx, (result, cls) in enumerate(extractor):
+                tops.append(cls)
                 total_result = result
                 if image_indx % 500 == 0:
                     with open(output_path, 'wb') as f:
@@ -507,11 +506,10 @@ def test_net(weights_path, output_dir, dataset_names=None):
 
             with open(output_path, 'wb') as f:
                 pickle.dump(total_result, f, protocol=pickle.HIGHEST_PROTOCOL)
-            with open(last_run_path, 'wb') as f:
-                pickle.dump(total_result, f, protocol=pickle.HIGHEST_PROTOCOL)
+            with open(os.path.join(last_run_path, 'videoset.json'), 'w') as f:
+                json.dump(total_result, f, indent=2)
 
-            with open(os.path.join(last_run_path, 'gallery_features.pckl'), 'wb') as f:
-                pickle.dump(tops, f)
+            np.save(os.path.join(last_run_path, 'gallery_features.pckl'), np.array(tops))
 
         print('Output detections file: %s\n' % output_path)
         print('File with tops: %s\n' % os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'))
