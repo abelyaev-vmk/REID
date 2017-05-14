@@ -590,8 +590,6 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(os.path.join(last_run_path, 'videoset.json'), 'w') as f:
                 json.dump(total_result, f, indent=2)
 
-            print(total_feats)
-
             json.dump(total_feats, open(os.path.join(last_run_path, 'gallery_features.pkl'), 'w'))
         else:
             extractor = extract_regions_image_collection(net, model, image_collection)
