@@ -443,7 +443,7 @@ def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.
     np.save('logs/last_run/blocks.npy', blocks)
     print(probs.shape)
     print(probs)
-    print(np.mean(np.array(list(map(lambda p: np.argsort(p)[::-1], np.array(probs).reshape(20 * 16, 5533)))).ravel()))
+    print(np.mean(np.array(list(map(lambda p: np.argsort(p)[::-1][0], np.array(probs).reshape(20 * 16, 5533)))).ravel()))
 
 
 def test_net(weights_path, output_dir, dataset_names=None):
