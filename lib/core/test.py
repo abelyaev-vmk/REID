@@ -438,7 +438,7 @@ def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.
         args = net.forward()
         print(args)
         probs.append(args['pid_prob'])
-        blocks.append(args['block_predict'])
+        blocks.append(args['bbox_pred'])
     np.save('logs/last_run/probs.npy', np.array(probs))
     np.save('logs/last_run/blocks.npy', np.array(blocks))
 
