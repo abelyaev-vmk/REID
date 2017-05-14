@@ -54,4 +54,4 @@ class TestDataLayer(caffe.Layer):
         im_scale = 244
         img = cv.resize(img, (244, 244), interpolation=cv.INTER_LINEAR)
         img = img.transpose((2, 0, 1))
-        return img, [x1, y1, x2, y2]
+        return img, [y1, x1, y2, x2]
