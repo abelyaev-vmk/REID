@@ -1,39 +1,39 @@
 name: "VGG_ILSVRC_16_layers"
 
-input: "data"
-input_shape {
-  dim: 1
-  dim: 3
-  dim: 224
-  dim: 224
-}
-
-input: "im_info"
-input_shape {
-  dim: 1
-  dim: 3
-}
-
-input: "rois"
-input_shape {
-  dim: 1
-  dim: 4
-}
-
-#layer {
- # name: "data"
- # type: "Python"
- # top: "data"
-#  top: "rois"
-#  python_param {
-#    module: "layers.DataLayer"
-#    layer: "TestDataLayer"
-#    param_str: "/home/mopkobka/"
-#  }
-#  include {
-#    phase: TEST
-#  }
+#input: "data"
+#input_shape {
+#  dim: 1
+#  dim: 3
+#  dim: 224
+#  dim: 224
 #}
+
+#input: "im_info"
+#input_shape {
+#  dim: 1
+#  dim: 3
+#}
+
+#input: "rois"
+#input_shape {
+#  dim: 1
+#  dim: 4
+#}
+
+layer {
+  name: "data"
+  type: "Python"
+  top: "data"
+  top: "rois"
+  python_param {
+    module: "layers.DataLayer"
+    layer: "TestDataLayer"
+    param_str: "PATH/TO/DATASET"
+  }
+  include {
+    phase: TEST
+  }
+}
 
 layer {
   name: "conv1_1"

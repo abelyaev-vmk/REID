@@ -1,5 +1,4 @@
-name: "VGG_ILSVRC_16_layers"
-
+name: "GeneratedModel_14_05_2017_15_46"
 input: "data"
 input_shape {
   dim: 1
@@ -7,46 +6,18 @@ input_shape {
   dim: 224
   dim: 224
 }
-
-input: "im_info"
-input_shape {
-  dim: 1
-  dim: 3
-}
-
-input: "rois"
-input_shape {
-  dim: 1
-  dim: 4
-}
-
-#layer {
- # name: "data"
- # type: "Python"
- # top: "data"
-#  top: "rois"
-#  python_param {
-#    module: "layers.DataLayer"
-#    layer: "TestDataLayer"
-#    param_str: "/home/mopkobka/"
-#  }
-#  include {
-#    phase: TEST
-#  }
-#}
-
 layer {
   name: "conv1_1"
   type: "Convolution"
   bottom: "data"
   top: "conv1_1"
   param {
-    lr_mult: 0
-    decay_mult: 0
+    lr_mult: 0.0
+    decay_mult: 0.0
   }
   param {
-    lr_mult: 0
-    decay_mult: 0
+    lr_mult: 0.0
+    decay_mult: 0.0
   }
   convolution_param {
     num_output: 64
@@ -66,12 +37,12 @@ layer {
   bottom: "conv1_1"
   top: "conv1_2"
   param {
-    lr_mult: 0
-    decay_mult: 0
+    lr_mult: 0.0
+    decay_mult: 0.0
   }
   param {
-    lr_mult: 0
-    decay_mult: 0
+    lr_mult: 0.0
+    decay_mult: 0.0
   }
   convolution_param {
     num_output: 64
@@ -102,12 +73,12 @@ layer {
   bottom: "pool1"
   top: "conv2_1"
   param {
-    lr_mult: 0
-    decay_mult: 0
+    lr_mult: 0.0
+    decay_mult: 0.0
   }
   param {
-    lr_mult: 0
-    decay_mult: 0
+    lr_mult: 0.0
+    decay_mult: 0.0
   }
   convolution_param {
     num_output: 128
@@ -127,12 +98,12 @@ layer {
   bottom: "conv2_1"
   top: "conv2_2"
   param {
-    lr_mult: 0
-    decay_mult: 0
+    lr_mult: 0.0
+    decay_mult: 0.0
   }
   param {
-    lr_mult: 0
-    decay_mult: 0
+    lr_mult: 0.0
+    decay_mult: 0.0
   }
   convolution_param {
     num_output: 128
@@ -163,12 +134,10 @@ layer {
   bottom: "pool2"
   top: "conv3_1"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 256
@@ -188,12 +157,10 @@ layer {
   bottom: "conv3_1"
   top: "conv3_2"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 256
@@ -213,12 +180,10 @@ layer {
   bottom: "conv3_2"
   top: "conv3_3"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 256
@@ -249,12 +214,10 @@ layer {
   bottom: "pool3"
   top: "conv4_1"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 512
@@ -274,12 +237,10 @@ layer {
   bottom: "conv4_1"
   top: "conv4_2"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 512
@@ -299,12 +260,10 @@ layer {
   bottom: "conv4_2"
   top: "conv4_3"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 512
@@ -335,12 +294,10 @@ layer {
   bottom: "pool4"
   top: "conv5_1"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 512
@@ -360,12 +317,10 @@ layer {
   bottom: "conv5_1"
   top: "conv5_2"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 512
@@ -385,12 +340,10 @@ layer {
   bottom: "conv5_2"
   top: "conv5_3"
   param {
-    lr_mult: 1
-    decay_mult: 1
+    lr_mult: 1.0
   }
   param {
-    lr_mult: 2
-    decay_mult: 0
+    lr_mult: 2.0
   }
   convolution_param {
     num_output: 512
@@ -404,178 +357,163 @@ layer {
   bottom: "conv5_3"
   top: "conv5_3"
 }
-
-#========= RCNN ============
-
-layer {
-  name: "roi_pool5"
-  type: "ROIPooling"
-  bottom: "conv5_3"
-  bottom: "rois"
-  top: "pool5"
-  roi_pooling_param {
-    pooled_w: 7
-    pooled_h: 7
-    spatial_scale: 0.0625 # 1/16
-  }
-}
-layer {
-  name: "fc6"
-  type: "InnerProduct"
-  bottom: "pool5"
-  top: "fc6"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 4096
-  }
-}
-layer {
-  name: "relu6"
-  type: "ReLU"
-  bottom: "fc6"
-  top: "fc6"
-}
-layer {
-  name: "drop6"
-  type: "Dropout"
-  bottom: "fc6"
-  top: "fc6"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-layer {
-  name: "fc7"
-  type: "InnerProduct"
-  bottom: "fc6"
-  top: "fc7"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 4096
-  }
-}
-layer {
-  name: "relu7"
-  type: "ReLU"
-  bottom: "fc7"
-  top: "fc7"
-}
-layer {
-  name: "drop7"
-  type: "Dropout"
-  bottom: "fc7"
-  top: "fc7"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-layer {
-  name: "feat"
-  type: "InnerProduct"
-  bottom: "fc7"
-  top: "feat"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 256
-    weight_filler {
-      type: "gaussian"
-      std: 0.01
-    }
-    bias_filler {
-      type: "constant"
-      value: 0
+  layer {
+    name: 'roi-pool'
+    type: 'ROIPooling'
+    top: 'roi-pool'
+    bottom: 'conv5_3'
+    bottom: 'rpn_big_proposal_rois'
+    roi_pooling_param {
+      pooled_h: 7
+      pooled_w: 7
+      spatial_scale: 0.0625
     }
   }
-}
-layer {
-  name: "relu8"
-  type: "ReLU"
-  bottom: "feat"
-  top: "feat"
-}
-layer {
-  name: "drop8"
-  type: "Dropout"
-  bottom: "feat"
-  top: "feat"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-layer {
-  name: "bbox_pred"
-  type: "InnerProduct"
-  bottom: "fc7"
-  top: "bbox_pred"
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 8
-    weight_filler {
-      type: "gaussian"
-      std: 0.001
+  layer {
+    name: 'fc6'
+    type: 'InnerProduct'
+    top: 'fc6'
+    bottom: 'roi-pool'
+    param {
+      lr_mult: 1.0
     }
-    bias_filler {
-      type: "constant"
-      value: 0
+    param {
+      lr_mult: 2.0
+    }
+    inner_product_param {
+      num_output: 4096
     }
   }
-}
-layer {
-  name: "pid_score"
-  type: "InnerProduct"
-  bottom: "feat"
-  top: "pid_score"
-  param {
-    lr_mult: 1
-    decay_mult: 0
+  layer {
+    name: 'relu6'
+    type: 'ReLU'
+    top: 'fc6'
+    bottom: 'fc6'
   }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  inner_product_param {
-    num_output: 5533
-    weight_filler {
-      type: "gaussian"
-      std: 0.001
-    }
-    bias_filler {
-      type: "constant"
-      value: 0
+  layer {
+    name: 'drop6'
+    type: 'Dropout'
+    top: 'fc6'
+    bottom: 'fc6'
+    dropout_param {
+      dropout_ratio: 0.5
     }
   }
-}
-layer {
-  name: "pid_prob"
-  type: "Softmax"
-  bottom: "pid_score"
-  top: "pid_prob"
-}
+  layer {
+    name: 'fc7'
+    type: 'InnerProduct'
+    top: 'fc7'
+    bottom: 'fc6'
+    param {
+      lr_mult: 1.0
+    }
+    param {
+      lr_mult: 2.0
+    }
+    inner_product_param {
+      num_output: 4096
+    }
+  }
+  layer {
+    name: 'relu7'
+    type: 'ReLU'
+    top: 'fc7'
+    bottom: 'fc7'
+  }
+  layer {
+    name: 'drop7'
+    type: 'Dropout'
+    top: 'fc7'
+    bottom: 'fc7'
+    dropout_param {
+      dropout_ratio: 0.5
+    }
+  }
+  layer {
+    name: 'bbox_pred'
+    type: 'InnerProduct'
+    top: 'bbox_pred'
+    bottom: 'fc7'
+    param {
+      lr_mult: 1.0
+    }
+    param {
+      lr_mult: 2.0
+    }
+    inner_product_param {
+      bias_filler {
+        type: 'constant'
+        value: 0
+      }
+      num_output: 8
+      weight_filler {
+        std: 0.001
+        type: 'gaussian'
+      }
+    }
+  }
+  layer {
+    name: 'feat'
+    type: 'InnerProduct'
+    top: 'feat'
+    bottom: 'fc7'
+    param {
+      decay_mult: 1
+      lr_mult: 1
+    }
+    param {
+      decay_mult: 0
+      lr_mult: 2
+    }
+    inner_product_param {
+      bias_filler {
+        type: 'constant'
+        value: 0
+      }
+      num_output: 256
+      weight_filler {
+        std: 0.01
+        type: 'gaussian'
+      }
+    }
+  }
+  layer {
+    name: 'relu8'
+    type: 'ReLU'
+    top: 'feat'
+    bottom: 'feat'
+  }
+  layer {
+    name: 'drop8'
+    type: 'Dropout'
+    top: 'feat'
+    bottom: 'feat'
+    dropout_param {
+      dropout_ratio: 0.5
+    }
+  }
+  layer {
+    name: 'pid_score'
+    type: 'InnerProduct'
+    top: 'pid_score'
+    bottom: 'feat'
+    param {
+      decay_mult: 1
+      lr_mult: 1
+    }
+    param {
+      decay_mult: 0
+      lr_mult: 2
+    }
+    inner_product_param {
+      bias_filler {
+        type: 'constant'
+        value: 0
+      }
+      num_output: 5533
+      weight_filler {
+        std: 0.001
+        type: 'gaussian'
+      }
+    }
+  }

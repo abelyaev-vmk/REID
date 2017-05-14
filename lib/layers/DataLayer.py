@@ -52,6 +52,6 @@ class TestDataLayer(caffe.Layer):
         x1, y1, x2, y2 = np.array([x / W, y / H, (x + w) / W, (y + h) / H], dtype=np.float32)
         img = np.array(img, dtype=np.float32)
         im_scale = 244
-        img = cv.resize(img, (350, 350), interpolation=cv.INTER_LINEAR)
+        img = cv.resize(img, (244, 244), interpolation=cv.INTER_LINEAR)
         img = img.transpose((2, 0, 1))
         return img, [x1, y1, x2, y2]

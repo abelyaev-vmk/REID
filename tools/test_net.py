@@ -11,9 +11,12 @@
 """Test a Fast R-CNN network on an image database."""
 
 import _init_paths
-from core.test import test_net, test_query
+from core.test import test_net, test_probe
+from core.test_probe import test_net_on_probe_set
 from core.config import cfg, cfg_from_file, cfg_from_list
 from core.config import get_output_dir
+from scipy.io import loadmat
+import os.path as osp
 import caffe
 import argparse
 import pprint
@@ -48,6 +51,20 @@ def parse_args():
     return args
 
 
+def load_probe(rois_dir, images_dir):
+    import json
+    import numpy as np
+    protoc = json.load(open(osp.join(rois_dir, 'videoset.json'), 'r'))
+    images, rois = [], []
+    for im_name in protoc:
+        for item in protoc[im_name]:
+            box = np.array([item['x'], item['y'], item['w'], item['h']])
+            box[2:] += box[:2]
+            images.append(osp.join(images_dir, im_name))
+            rois.append(box)
+    return protoc, images, rois
+
+
 if __name__ == '__main__':
     args = parse_args()
 
@@ -75,4 +92,13 @@ if __name__ == '__main__':
     output_dir_name += '_' + datetime.datetime.now().strftime("%d_%m_%Y_%H_%M")
     output_dir = get_output_dir(output_dir_name, None)
     # test_net(args.caffemodel, output_dir, args.datasets)
-    test_query(args.caffemodel, output_dir, args.datasets)
+    # test_probe(args.caffemodel, output_dir, args.datasets)
+
+    rois_dir = 'logs/last_run'
+    images_dir = cfg.TEST.DATASETS[0].PATH
+
+    _, probe_images, probe_rois = load_probe(
+        rois_dir, images_dir)
+
+    net = caffe.Net('models/vgg16/test_query_norm.prototxt', args.caffemodel, caffe.TEST)
+    test_net_on_probe_set(net, probe_images, probe_rois, 'feat', output_dir)
