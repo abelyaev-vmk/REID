@@ -436,12 +436,10 @@ def test_image_collection(net, model, image_collection, output_dir):
             keep = nms(detections[:, :5], cfg.TEST.FINAL_NMS)
             detections = detections[keep]
             json_detections = to_json_format(detections)
-            print(keep)
-            print(detections)
-            print(cls[keep].shape)
-            exit(0)
+            feats = cls[keep]
         else:
             json_detections = []
+            feats = []
 
         # json_detections = []
         # for j in range(1, scores.shape[1]):
@@ -461,7 +459,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         #
         #     json_detections += to_json_format(detections, j)
 
-        all_detections[image_basename] = json_detections
+        all_detections[image_basename] = [json_detections, feats]
 
         if cfg.TEST.VIZUALIZATION.ENABLE:
             score_thresh = cfg.TEST.VIZUALIZATION.SCORE_THRESH
@@ -484,7 +482,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         print('im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
               .format(indx + 1, len(image_collection),
                       _t['im_detect'].average_time, _t['misc'].average_time))
-        yield all_detections, cls
+        yield all_detections
 
 
 def extract_regions_image_collection(net, model, image_collection):
@@ -574,11 +572,9 @@ def test_net(weights_path, output_dir, dataset_names=None):
             extractor = test_image_collection(net, model, image_collection, output_dir)
             total_result = None
             tops = []
-            for image_indx, (result, cls) in enumerate(extractor):
-                print(cls)
-                print(np.array(cls).shape)
+            for image_indx, result in enumerate(extractor):
+                print(result)
                 exit(0)
-                tops.append(cls)
                 total_result = result
                 if image_indx % 1000 == 0:
                     with open(output_path, 'w') as f:
