@@ -114,7 +114,7 @@ def _project_im_rois(im_rois, scales):
     return rois, levels
 
 
-def _get_blobs(sample, target_size, rois):
+def _get_blobs(sample, target_size, rois=None):
     """Convert an image and RoIs within that image into network inputs."""
     blobs = {'data': None, 'rois': None}
     blobs['data'], im_scale_factors = _get_image_blob(sample, target_size)
