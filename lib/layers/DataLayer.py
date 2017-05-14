@@ -11,6 +11,7 @@ class TestDataLayer(caffe.Layer):
         self.path_to_dataset = cfg.TEST.DATASETS[0].PATH
         self.rois = self.parse_json(json.load(open('logs/last_run/videoset.json', 'r')))
         self.idx = 0
+        self.batch_size = 16
 
     # initialize layer's shape
     def reshape(self, bottom, top):
@@ -20,15 +21,16 @@ class TestDataLayer(caffe.Layer):
             raise Exception('Need to define two tops: data and label')
 
         img, roi = self.load_image_and_rois(0)
-        top[0].reshape(1, *img.shape)
-        top[1].reshape(1, 4)
+        top[0].reshape(self.batch_size, *img.shape)
+        top[1].reshape(self.batch_size, 4)
 
     def forward(self, bottom, top):
-        if self.idx < len(self.rois):
+        for i in range(self.batch_size):
             img, roi = self.load_image_and_rois(self.idx)
             top[0].data[self.idx, ...] = img
             top[1].data[self.idx, ...] = roi
             self.idx += 1
+            self.idx = self.idx % len(self.rois)
 
     def backward(self, top, propagate_down, bottom):
         pass
