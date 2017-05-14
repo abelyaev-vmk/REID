@@ -155,8 +155,7 @@ def test_net_on_probe_set(net, images, rois, feat_blob, output_dir):
         features.append(feat)
         _t['im_exfeat'].toc()
         print(np.argmax(feat))
-        print( 'im_exfeat: {:d}/{:d} {:.3f}s' \
-            .format(i + 1, num_images, _t['im_exfeat'].average_time))
+        print('im_exfeat: {:d}/{:d} {:.3f}s'.format(i + 1, num_images, _t['im_exfeat'].average_time))
 
     feat_file = os.path.join(output_dir, 'probe_features.pkl')
     with open(feat_file, 'wb') as f:

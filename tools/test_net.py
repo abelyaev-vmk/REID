@@ -101,4 +101,4 @@ if __name__ == '__main__':
         rois_dir, images_dir)
 
     net = caffe.Net('models/vgg16/test_query_norm.prototxt', args.caffemodel, caffe.TEST)
-    test_net_on_probe_set(net, probe_images, probe_rois, 'feat', output_dir)
+    test_net_on_probe_set(net, probe_images, probe_rois, 'feat', rois_dir)
