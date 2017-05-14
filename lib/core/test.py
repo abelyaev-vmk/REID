@@ -34,7 +34,7 @@ class python2dict(dict):
         return self.items()
 
 
-def _get_image_blob(sample, target_size):
+def _get_image_blob(sample, target_size=cfg.TEST.SCALES):
     """Converts an image into a network input.
 
     Arguments:
@@ -407,7 +407,8 @@ def test_image_collection(net, model, image_collection, output_dir):
         image_basename = str(PurePath(sample.id).relative_to(image_collection.imgs_path))
 
         _t['im_detect'].tic()
-        scores, boxes, cls = im_detect2(net, model, 'feat', sample)
+        scores, boxes, cls = im_detect2(net, sample, 'feat')
+        # scores, boxes = im_detect(net, model, sample)
         _t['im_detect'].toc()
 
         _t['misc'].tic()
