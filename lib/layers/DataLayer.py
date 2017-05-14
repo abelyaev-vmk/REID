@@ -48,5 +48,6 @@ class TestDataLayer(caffe.Layer):
     def load_image_and_rois(self, idx):
         img = cv.imread(os.path.join(self.path_to_dataset, self.rois[idx][0]))
         img = np.array(img, dtype=np.float32)
+        img = cv.resize(img, (244, 244))
         img = img.transpose((2, 0, 1))
         return img, self.rois[idx][1:]
