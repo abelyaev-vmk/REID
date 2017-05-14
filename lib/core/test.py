@@ -434,9 +434,7 @@ def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.
     net = caffe.Net('models/vgg16/test_query_norm.prototxt', weights_path, caffe.TEST)
     net.name = os.path.splitext(os.path.basename(weights_path))[0]
     args = net.forward()
-    print(args)
-    print('\n')
-    print(net.name)
+    print(list(map(np.argmax, args['pid_prob'])))
 
 
 def test_net(weights_path, output_dir, dataset_names=None):
