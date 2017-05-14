@@ -406,8 +406,6 @@ def test_image_collection(net, model, image_collection, output_dir):
     all_detections = {}
     all_feats = []
     for indx, sample in enumerate(DirectIterator(image_collection)):
-        if len(all_detections) > 1:
-            break
         image_basename = str(PurePath(sample.id).relative_to(image_collection.imgs_path))
 
         _t['im_detect'].tic()
