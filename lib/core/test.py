@@ -434,7 +434,7 @@ def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.
     net = caffe.Net('models/vgg16/test_query_norm.prototxt', weights_path, caffe.TEST)
     net.name = os.path.splitext(os.path.basename(weights_path))[0]
     probs, blocks = [], []
-    for _ in range(100):
+    for _ in range(20):
         args = net.forward()
         probs.append(args['pid_prob'])
         blocks.append(args['bbox_pred'])
