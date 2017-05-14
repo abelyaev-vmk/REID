@@ -434,7 +434,7 @@ def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.
     net = caffe.Net('models/vgg16/test_query_norm.prototxt', weights_path, caffe.TEST)
     net.name = os.path.splitext(os.path.basename(weights_path))[0]
     probs, blocks = [], []
-    for _ in range(2):
+    for _ in range(20):
         args = net.forward()
         probs.append(args['pid_prob'])
         blocks.append(args['bbox_pred'])
@@ -443,7 +443,7 @@ def test_query(weights_path, output_dir, test_prototxt='models/vgg16/test_query.
     np.save('logs/last_run/blocks.npy', blocks)
     print(probs.shape)
     print(probs)
-    print(min(list(map(lambda p: np.argsort(p)[::-1], np.array(probs).reshape(2 * 16, 5533)))))
+    print(min(np.array(list(map(lambda p: np.argsort(p)[::-1], np.array(probs).reshape(20 * 16, 5533)))).ravel()))
 
 
 def test_net(weights_path, output_dir, dataset_names=None):
