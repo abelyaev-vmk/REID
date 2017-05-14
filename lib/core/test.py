@@ -404,6 +404,7 @@ def test_image_collection(net, model, image_collection, output_dir):
 
     _t = {'im_detect' : Timer(), 'misc': Timer()}
     all_detections = {}
+    all_feats = []
     for indx, sample in enumerate(DirectIterator(image_collection)):
         image_basename = str(PurePath(sample.id).relative_to(image_collection.imgs_path))
 
@@ -419,6 +420,8 @@ def test_image_collection(net, model, image_collection, output_dir):
         cls_scores = scores.max(axis=1)
         mask = (scores_class > 0) * (cls_scores > SCORE_THRESH)
         inds = np.where(mask == True)[0]
+
+
 
         if np.sum(mask):
             # print(inds, scores_class)
@@ -438,6 +441,7 @@ def test_image_collection(net, model, image_collection, output_dir):
 
         else:
             json_detections = []
+            feats = []
 
 
         # json_detections = []
@@ -459,6 +463,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         #     json_detections += to_json_format(detections, j)
 
         all_detections[image_basename] = [json_detections]
+        all_feats.append([image_basename, feats])
 
         if cfg.TEST.VIZUALIZATION.ENABLE:
             score_thresh = cfg.TEST.VIZUALIZATION.SCORE_THRESH
@@ -481,7 +486,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         print('im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
               .format(indx + 1, len(image_collection),
                       _t['im_detect'].average_time, _t['misc'].average_time))
-        yield all_detections, feats
+        yield all_detections, all_feats
 
 
 def extract_regions_image_collection(net, model, image_collection):
@@ -570,10 +575,10 @@ def test_net(weights_path, output_dir, dataset_names=None):
         if not image_collection.extract_clusters:
             extractor = test_image_collection(net, model, image_collection, output_dir)
             total_result = None
-            tops = []
+            total_feats = None
             for image_indx, (result, feats) in enumerate(extractor):
-                tops.append(feats)
                 total_result = result
+                total_feats = feats
                 if image_indx % 1000 == 0:
                     with open(output_path, 'w') as f:
                         json.dump(total_result, f, indent=2)
@@ -583,14 +588,14 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(os.path.join(last_run_path, 'videoset.json'), 'w') as f:
                 json.dump(total_result, f, indent=2)
 
-            np.save(os.path.join(last_run_path, 'gallery_features'), np.array(tops))
+            np.save(os.path.join(last_run_path, 'gallery_features'), np.array(total_feats))
         else:
             extractor = extract_regions_image_collection(net, model, image_collection)
             total_result = None
-            tops = []
-            for image_indx, (result, cls) in enumerate(extractor):
-                tops.append(cls)
+            total_feats = None
+            for image_indx, (result, feats) in enumerate(extractor):
                 total_result = result
+                total_feats = feats
                 if image_indx % 500 == 0:
                     with open(output_path, 'wb') as f:
                         pickle.dump(result, f, protocol=pickle.HIGHEST_PROTOCOL)
@@ -600,7 +605,7 @@ def test_net(weights_path, output_dir, dataset_names=None):
             with open(os.path.join(last_run_path, 'videoset.json'), 'w') as f:
                 json.dump(total_result, f, indent=2)
 
-            np.save(os.path.join(last_run_path, 'gallery_features.pckl'), np.array(tops))
+            np.save(os.path.join(last_run_path, 'gallery_features.pckl'), np.array(total_feats))
 
         print('Output detections file: %s\n' % output_path)
         print('File with tops: %s\n' % os.path.join(os.path.dirname(os.path.abspath(output_path)), 'tops.pckl'))
