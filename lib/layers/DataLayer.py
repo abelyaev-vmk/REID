@@ -25,7 +25,7 @@ class TestDataLayer(caffe.Layer):
 
     def forward(self, bottom, top):
         if self.idx < len(self.rois):
-            img, roi = self.load_image_and_label(self.idx)
+            img, roi = self.load_image_and_rois(self.idx)
             top[0].data[self.idx, ...] = img
             top[1].data[self.idx, ...] = roi
             self.idx += 1
