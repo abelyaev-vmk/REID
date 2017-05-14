@@ -47,7 +47,7 @@ class TestDataLayer(caffe.Layer):
 
     def load_image_and_rois(self, idx):
         img = cv.imread(os.path.join(self.path_to_dataset, self.rois[idx][0]))
-        x, y, w, h = self.rois[1:]
+        x, y, w, h = self.rois[idx][1:]
         W, H = img.shape[:2]
         x1, y1, x2, y2 = [x / w, y / h, (x + w) / W, (y + h) / H]
         img = np.array(img, dtype=np.float32)
