@@ -34,7 +34,7 @@ class python2dict(dict):
         return self.items()
 
 
-def _get_image_blob(sample, target_size=cfg.TEST.SCALES):
+def _get_image_blob(sample, target_size=cfg.TEST.SCALES[0]):
     """Converts an image into a network input.
 
     Arguments:
