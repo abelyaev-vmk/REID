@@ -575,8 +575,6 @@ def test_net(weights_path, output_dir, dataset_names=None):
             total_result = None
             tops = []
             for image_indx, result in enumerate(extractor):
-                print(result)
-                exit(0)
                 total_result = result
                 if image_indx % 1000 == 0:
                     with open(output_path, 'w') as f:
