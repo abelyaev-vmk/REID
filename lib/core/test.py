@@ -52,9 +52,6 @@ def _get_image_blob(sample, target_size=600):
     im_size_min = np.min(im_shape[0:2])
     im_size_max = np.max(im_shape[0:2])
 
-    print('>>>>\n'*10)
-    print(im_shape, im_size_min)
-
     processed_ims = []
     im_scale_factors = []
 
