@@ -286,7 +286,6 @@ def im_detect(net, model, sample):
 def to_json_format(detections, feats=None, object_class=None):
     bboxes = []
     for num, det in enumerate(detections):
-        print(feats[num])
         bbox = {'x': int(det[0]), 'y': int(det[1]),
                 'w': int(det[2]-det[0]+1), 'h': int(det[3]-det[1]+1),
                 'score': float(det[4]),
@@ -438,9 +437,7 @@ def test_image_collection(net, model, image_collection, output_dir):
             keep = nms(detections[:, :5], cfg.TEST.FINAL_NMS)
             detections = detections[keep]
             feats = cls[keep]
-            print(feats)
-            print(keep)
-            json_detections = to_json_format(detections, feats)
+            json_detections = to_json_format(detections)
 
         else:
             json_detections = []
@@ -487,7 +484,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         print('im_detect: {:d}/{:d} {:.3f}s {:.3f}s' \
               .format(indx + 1, len(image_collection),
                       _t['im_detect'].average_time, _t['misc'].average_time))
-        yield all_detections
+        yield all_detections, feats
 
 
 def extract_regions_image_collection(net, model, image_collection):
@@ -577,7 +574,8 @@ def test_net(weights_path, output_dir, dataset_names=None):
             extractor = test_image_collection(net, model, image_collection, output_dir)
             total_result = None
             tops = []
-            for image_indx, result in enumerate(extractor):
+            for image_indx, (result, feats) in enumerate(extractor):
+                tops.append(feats)
                 total_result = result
                 if image_indx % 1000 == 0:
                     with open(output_path, 'w') as f:
