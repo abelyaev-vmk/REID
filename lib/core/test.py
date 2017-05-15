@@ -411,7 +411,7 @@ def test_image_collection(net, model, image_collection, output_dir):
         _t['im_detect'].tic()
         # scores, boxes, cls = im_detect2(net, sample, 'feat')
         scores, boxes = im_detect(net, model, sample)
-        cls = net.blobs['pid_score'].data.copy()
+        cls = net.blobs['feat'].data.copy()
         _t['im_detect'].toc()
 
         _t['misc'].tic()
