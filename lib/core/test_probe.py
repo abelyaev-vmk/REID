@@ -148,6 +148,8 @@ def test_net_on_probe_set(net, images, rois, feat_blob, output_dir):
     _t = {'im_exfeat': Timer(), 'misc': Timer()}
 
     for i in range(num_images):
+        if i > 1:
+            break
         im = cv2.imread(images[i])
         roi = rois[i].reshape(1, 4)
         _t['im_exfeat'].tic()
@@ -156,6 +158,8 @@ def test_net_on_probe_set(net, images, rois, feat_blob, output_dir):
         _t['im_exfeat'].toc()
         print(np.argmax(feat))
         print('im_exfeat: {:d}/{:d} {:.3f}s'.format(i + 1, num_images, _t['im_exfeat'].average_time))
+
+    print(features)
 
     feat_file = os.path.join(output_dir, 'probe_features.npy')
     with open(feat_file, 'wb') as f:
