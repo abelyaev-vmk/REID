@@ -161,4 +161,4 @@ def test_net_on_probe_set(net, images, rois, feat_blob, output_dir):
 
     feat_file = os.path.join(output_dir, 'probe_features.npy')
     with open(feat_file, 'wb') as f:
-        np.save(f, features)
+        cPickle.dump(features, f, cPickle.HIGHEST_PROTOCOL)
