@@ -210,7 +210,7 @@ __C.TEST.DATASETS = []
 __C.TEST.SCALES = (600,)
 # Each scale is the pixel size of an image's shortest side
 # Max pixel size of the longest side of a scaled input image
-__C.TEST.MAX_SIZE = 1000
+__C.TEST.MAX_SIZE = 1400
 
 __C.TEST.WITHOUT_UPSAMPLE = False
 __C.TEST.DENSE_SCAN = False
